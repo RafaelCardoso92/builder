@@ -167,7 +167,7 @@ export default function HomePage() {
             {popularTrades.map((trade) => (
               <Link
                 key={trade.slug}
-                href={`/trades/${trade.slug}`}
+                href={`/search?trade=${encodeURIComponent(trade.name)}`}
                 className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 text-center hover:shadow-lg hover:border-primary-200 transition-all group"
               >
                 <div className="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:bg-primary-600 transition-colors">

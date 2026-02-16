@@ -15,10 +15,10 @@ const footerLinks = {
     { name: 'Help Centre', href: '/help' },
   ],
   popular: [
-    { name: 'Find a Builder', href: '/trades/building-construction' },
-    { name: 'Find a Plumber', href: '/trades/plumbing-heating' },
-    { name: 'Find an Electrician', href: '/trades/electrical' },
-    { name: 'Find a Roofer', href: '/trades/roofing' },
+    { name: 'Find a Builder', href: '/search?trade=Building+%26+Construction' },
+    { name: 'Find a Plumber', href: '/search?trade=Plumbing+%26+Heating' },
+    { name: 'Find an Electrician', href: '/search?trade=Electrical' },
+    { name: 'Find a Roofer', href: '/search?trade=Roofing' },
   ],
   legal: [
     { name: 'Terms of Service', href: '/terms' },
