@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import {
   Briefcase,
   MapPin,
@@ -358,13 +359,13 @@ export default function JobPostForm({ trades }: JobPostFormProps) {
 
       <p className="text-sm text-slate-500 text-center">
         By posting a job, you agree to our{' '}
-        <a href="/terms" className="text-primary-600 hover:underline">
+        <Link href="/terms" className="text-primary-600 hover:underline">
           Terms of Service
-        </a>{' '}
+        </Link>{' '}
         and{' '}
-        <a href="/privacy" className="text-primary-600 hover:underline">
+        <Link href="/privacy" className="text-primary-600 hover:underline">
           Privacy Policy
-        </a>
+        </Link>
         .
       </p>
     </form>

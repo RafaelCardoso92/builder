@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import {
   Send,
   AlertCircle,
@@ -101,12 +102,12 @@ export default function JobApplicationForm({
           <div>
             <p>{error}</p>
             {limitReached && (
-              <a
+              <Link
                 href="/dashboard/subscription"
                 className="inline-block mt-2 text-sm font-medium underline"
               >
                 Upgrade your subscription
-              </a>
+              </Link>
             )}
           </div>
         </div>
@@ -178,12 +179,12 @@ export default function JobApplicationForm({
           <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
           <p>
             Free accounts can apply to 5 jobs per month.{' '}
-            <a
+            <Link
               href="/dashboard/subscription"
               className="text-primary-600 hover:underline"
             >
               Upgrade
-            </a>{' '}
+            </Link>{' '}
             for more applications.
           </p>
         </div>
