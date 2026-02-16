@@ -17,6 +17,7 @@ import {
   LogOut,
   Briefcase,
   ClipboardList,
+  AlertTriangle,
 } from 'lucide-react';
 
 const navItems = [
@@ -30,6 +31,7 @@ const navItems = [
   { href: '/dashboard/reviews', label: 'Reviews', icon: Star },
   { href: '/dashboard/verifications', label: 'Verifications', icon: Shield },
   { href: '/dashboard/analytics', label: 'Analytics', icon: BarChart3 },
+  { href: '/dashboard/bad-payers', label: 'Bad Payers', icon: AlertTriangle },
   { href: '/dashboard/subscription', label: 'Subscription', icon: CreditCard },
   { href: '/dashboard/settings', label: 'Settings', icon: Settings },
 ];

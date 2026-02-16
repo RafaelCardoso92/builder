@@ -136,6 +136,7 @@ model TradesProfile {
   openingHours    OpeningHours[]
   favouritedBy    Favourite[]
   jobApplications JobApplication[]
+  badPayerReports BadPayerReport[]
 }
 
 enum SubscriptionTier {
@@ -539,4 +540,142 @@ enum ApplicationStatus {
   ACCEPTED
   DECLINED
   WITHDRAWN
+}
+
+// =============================================================================
+// BAD PAYER REPORTS (Non-Paying Customer Whistleblowing)
+// =============================================================================
+
+model BadPayerReport {
+  id          String   @id @default(cuid())
+  reporterId  String
+  reporter    TradesProfile @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+
+  // Incident details
+  incidentDate        DateTime
+  workDescription     String   @db.Text
+  agreedAmount        Float
+  amountOwed          Float
+  paymentTerms        String?
+
+  // Location (privacy-preserving - only area/postcode prefix)
+  locationArea        String
+  locationPostcode    String?  // First part only e.g. "SW1"
+  latitude            Float?
+  longitude           Float?
+
+  // References
+  invoiceReference    String?
+  contractReference   String?
+  communicationSummary String? @db.Text
+
+  // Legal consent
+  legalConsentGiven     Boolean  @default(false)
+  legalConsentTimestamp DateTime?
+  truthDeclaration      Boolean  @default(false)
+
+  // Status
+  status    BadPayerReportStatus @default(PENDING_REVIEW)
+  isPublic  Boolean              @default(false)
+
+  // Admin
+  adminNotes String?   @db.Text
+  reviewedAt DateTime?
+  reviewedBy String?
+  rejectionReason String?
+
+  // Expiry (2 years)
+  expiresAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  evidence BadPayerEvidence[]
+  disputes BadPayerDispute[]
+
+  @@index([status])
+  @@index([locationPostcode])
+  @@index([reporterId])
+}
+
+enum BadPayerReportStatus {
+  DRAFT
+  PENDING_REVIEW
+  PUBLISHED
+  DISPUTED
+  RESOLVED
+  REJECTED
+  REMOVED
+  EXPIRED
+}
+
+model BadPayerEvidence {
+  id        String          @id @default(cuid())
+  reportId  String
+  report    BadPayerReport  @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  type        BadPayerEvidenceType
+  fileName    String
+  filePath    String
+  fileSize    Int
+  mimeType    String
+  description String?
+
+  uploadedAt DateTime @default(now())
+}
+
+enum BadPayerEvidenceType {
+  INVOICE
+  CONTRACT
+  QUOTE
+  COMMUNICATION
+  PHOTO_BEFORE
+  PHOTO_AFTER
+  RECEIPT
+  OTHER
+}
+
+model BadPayerDispute {
+  id        String          @id @default(cuid())
+  reportId  String
+  report    BadPayerReport  @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  // Contact details
+  contactEmail String
+  contactPhone String?
+  contactName  String?
+
+  // Dispute details
+  reason      BadPayerDisputeReason
+  explanation String   @db.Text
+
+  // Status
+  status      BadPayerDisputeStatus @default(PENDING)
+
+  // Resolution
+  resolution  String?  @db.Text
+  resolvedAt  DateTime?
+  resolvedBy  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum BadPayerDisputeReason {
+  PAYMENT_MADE
+  WORK_NOT_COMPLETED
+  QUALITY_ISSUES
+  AMOUNT_INCORRECT
+  IDENTITY_ERROR
+  DEFAMATION
+  OTHER
+}
+
+enum BadPayerDisputeStatus {
+  PENDING
+  UNDER_REVIEW
+  UPHELD
+  REJECTED
+  RESOLVED
 }
