@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, Suspense } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from "lucide-react";
@@ -9,7 +9,7 @@ import { Eye, EyeOff, Mail, Lock, AlertCircle } from "lucide-react";
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
+  const callbackUrl = searchParams.get("callbackUrl");
   const error = searchParams.get("error");
 
   const [email, setEmail] = useState("");
@@ -33,7 +33,22 @@ function LoginForm() {
       if (result?.error) {
         setErrorMessage(result.error);
       } else {
-        router.push(callbackUrl);
+        // Get session to determine role-based redirect
+        const session = await getSession();
+        let redirectUrl = callbackUrl || "/";
+
+        // If no specific callback, redirect based on role
+        if (!callbackUrl && session?.user?.role) {
+          if (session.user.role === "TRADESPERSON") {
+            redirectUrl = "/dashboard";
+          } else if (session.user.role === "ADMIN") {
+            redirectUrl = "/admin";
+          } else {
+            redirectUrl = "/account";
+          }
+        }
+
+        router.push(redirectUrl);
         router.refresh();
       }
     } catch (error) {
