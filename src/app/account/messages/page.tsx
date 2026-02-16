@@ -159,13 +159,12 @@ export default async function AccountMessagesPage() {
                           {profile?.businessName || tradesperson?.name || 'Unknown'}
                         </h3>
                         {profile?.slug && (
-                          <Link
-                            href={'/' + profile.slug}
-                            onClick={(e) => e.stopPropagation()}
+                          <span
                             className="text-slate-400 hover:text-primary-600"
+                            title={`View ${profile.businessName} profile`}
                           >
                             <ExternalLink className="w-4 h-4" />
-                          </Link>
+                          </span>
                         )}
                       </div>
                       <span className="flex-shrink-0 text-sm text-slate-500 flex items-center gap-1">
