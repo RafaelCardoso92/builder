@@ -138,6 +138,7 @@ export default async function JobsPage({
               <Link
                 key={job.id}
                 href={`/jobs/${job.id}`}
+                data-testid="job-card"
                 className="block bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md hover:border-primary-200 transition-all"
               >
                 <div className="flex gap-6">
