@@ -1,0 +1,542 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =============================================================================
+// USER & AUTHENTICATION
+// =============================================================================
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String?
+  name          String
+  phone         String?
+  role          UserRole  @default(CUSTOMER)
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  tradesProfile TradesProfile?
+  reviewsGiven  Review[]                  @relation("ReviewAuthor")
+  quoteRequests QuoteRequest[]            @relation("QuoteRequester")
+  conversations ConversationParticipant[]
+  favourites    Favourite[]
+  accounts      Account[]
+  sessions      Session[]
+  messagesSent  Message[]                 @relation("MessageSender")
+  reports       Report[]                  @relation("ReportsSubmitted")
+  jobsPosted    Job[]                     @relation("JobPoster")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+enum UserRole {
+  CUSTOMER
+  TRADESPERSON
+  ADMIN
+}
+
+// =============================================================================
+// TRADESPERSON PROFILE
+// =============================================================================
+
+model TradesProfile {
+  id           String @id @default(cuid())
+  userId       String @unique
+  user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Business Info
+  businessName String
+  slug         String  @unique
+  tagline      String?
+  description  String? @db.Text
+  phone        String
+  email        String
+  website      String?
+
+  // Location
+  address        String?
+  city           String
+  postcode       String
+  latitude       Float?
+  longitude      Float?
+  coverageRadius Int     @default(25) // miles
+
+  // Media
+  logo       String?
+  coverImage String?
+
+  // Status
+  isActive   Boolean   @default(true)
+  isVerified Boolean   @default(false)
+  verifiedAt DateTime?
+
+  // Subscription
+  subscriptionTier SubscriptionTier @default(FREE)
+  stripeCustomerId String?
+  subscriptionId   String?
+
+  // Stats (denormalized for performance)
+  averageRating Float   @default(0)
+  reviewCount   Int     @default(0)
+  responseRate  Float   @default(0)
+  responseTime  String? // "Within 1 hour"
+  profileViews  Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  trades          TradesProfileTrade[]
+  portfolio       PortfolioItem[]
+  reviews         Review[]
+  quoteRequests   QuoteRequest[]
+  verifications   Verification[]
+  openingHours    OpeningHours[]
+  favouritedBy    Favourite[]
+  jobApplications JobApplication[]
+}
+
+enum SubscriptionTier {
+  FREE
+  PRO
+  PREMIUM
+}
+
+// =============================================================================
+// TRADE CATEGORIES
+// =============================================================================
+
+model Trade {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  slug        String  @unique
+  description String?
+  icon        String?
+  sortOrder   Int     @default(0)
+
+  // Hierarchy
+  parentId String?
+  parent   Trade?  @relation("TradeHierarchy", fields: [parentId], references: [id])
+  children Trade[] @relation("TradeHierarchy")
+
+  // Relations
+  profiles TradesProfileTrade[]
+  jobs     Job[]
+
+  createdAt DateTime @default(now())
+}
+
+model TradesProfileTrade {
+  id              String        @id @default(cuid())
+  profileId       String
+  profile         TradesProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  tradeId         String
+  trade           Trade         @relation(fields: [tradeId], references: [id])
+  yearsExperience Int?
+
+  @@unique([profileId, tradeId])
+}
+
+// =============================================================================
+// PORTFOLIO
+// =============================================================================
+
+model PortfolioItem {
+  id          String        @id @default(cuid())
+  profileId   String
+  profile     TradesProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  title       String
+  description String?       @db.Text
+  images      String[]
+  tradeType   String?
+  location    String?
+  completedAt DateTime?
+  sortOrder   Int           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+// =============================================================================
+// REVIEWS
+// =============================================================================
+
+model Review {
+  id        String        @id @default(cuid())
+  profileId String
+  profile   TradesProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User          @relation("ReviewAuthor", fields: [authorId], references: [id])
+
+  // Ratings (1-5)
+  overallRating     Int
+  qualityRating     Int?
+  reliabilityRating Int?
+  valueRating       Int?
+
+  // Content
+  title   String
+  content String   @db.Text
+  images  String[]
+
+  // Work details
+  workType String?
+  workDate DateTime?
+  cost     String? // "£500-£1000"
+
+  // Moderation
+  status     ReviewStatus @default(PENDING)
+  isVerified Boolean      @default(false)
+
+  // Tradesperson response
+  response    String?   @db.Text
+  respondedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  FLAGGED
+}
+
+// =============================================================================
+// QUOTE REQUESTS
+// =============================================================================
+
+model QuoteRequest {
+  id         String        @id @default(cuid())
+  profileId  String
+  profile    TradesProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  customerId String
+  customer   User          @relation("QuoteRequester", fields: [customerId], references: [id])
+
+  // Details
+  title       String
+  description String   @db.Text
+  tradeType   String
+  images      String[]
+
+  // Location
+  postcode String
+  address  String?
+
+  // Timing
+  timeframe      String? // "ASAP", "Within 1 month", etc.
+  preferredDates String?
+
+  // Budget
+  budgetRange String?
+
+  // Status
+  status   QuoteStatus @default(PENDING)
+  viewedAt DateTime?
+
+  // Response
+  responseMessage String?   @db.Text
+  respondedAt     DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relation to conversation
+  conversationId String?
+}
+
+enum QuoteStatus {
+  PENDING
+  VIEWED
+  RESPONDED
+  ACCEPTED
+  DECLINED
+  COMPLETED
+}
+
+// =============================================================================
+// MESSAGING
+// =============================================================================
+
+model Conversation {
+  id             String                    @id @default(cuid())
+  participants   ConversationParticipant[]
+  messages       Message[]
+  quoteRequestId String?
+  lastMessageAt  DateTime                  @default(now())
+  createdAt      DateTime                  @default(now())
+  updatedAt      DateTime                  @updatedAt
+}
+
+model ConversationParticipant {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id])
+  lastReadAt     DateTime?
+
+  @@unique([conversationId, userId])
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         User         @relation("MessageSender", fields: [senderId], references: [id])
+  content        String       @db.Text
+  attachments    String[]
+  readAt         DateTime?
+  createdAt      DateTime     @default(now())
+}
+
+// =============================================================================
+// VERIFICATIONS
+// =============================================================================
+
+model Verification {
+  id          String             @id @default(cuid())
+  profileId   String
+  profile     TradesProfile      @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  type        VerificationType
+  status      VerificationStatus @default(PENDING)
+  documentUrl String?
+  expiresAt   DateTime?
+  verifiedAt  DateTime?
+  verifiedBy  String?
+  notes       String?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+}
+
+enum VerificationType {
+  IDENTITY
+  INSURANCE
+  PUBLIC_LIABILITY
+  QUALIFICATION
+  GAS_SAFE
+  NICEIC
+  TRUSTMARK
+  FENSA
+  CHAS
+  CONSTRUCTIONLINE
+}
+
+enum VerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  EXPIRED
+}
+
+// =============================================================================
+// FAVOURITES
+// =============================================================================
+
+model Favourite {
+  id        String        @id @default(cuid())
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  profileId String
+  profile   TradesProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  createdAt DateTime      @default(now())
+
+  @@unique([userId, profileId])
+}
+
+// =============================================================================
+// OPENING HOURS
+// =============================================================================
+
+model OpeningHours {
+  id        String        @id @default(cuid())
+  profileId String
+  profile   TradesProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  day       Int // 0-6 (Sunday-Saturday)
+  openTime  String? // "09:00"
+  closeTime String? // "17:00"
+  isClosed  Boolean       @default(false)
+
+  @@unique([profileId, day])
+}
+
+// =============================================================================
+// REPORTS
+// =============================================================================
+
+model Report {
+  id          String       @id @default(cuid())
+  reporterId  String
+  reporter    User         @relation("ReportsSubmitted", fields: [reporterId], references: [id])
+
+  // What is being reported
+  targetType  ReportTargetType
+  targetId    String
+
+  // Report details
+  reason      ReportReason
+  description String?      @db.Text
+
+  // Status
+  status      ReportStatus @default(PENDING)
+
+  // Admin handling
+  handledBy   String?
+  handledAt   DateTime?
+  resolution  String?      @db.Text
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([targetType, targetId])
+  @@index([status])
+}
+
+enum ReportTargetType {
+  REVIEW
+  PROFILE
+  MESSAGE
+}
+
+enum ReportReason {
+  SPAM
+  FAKE_REVIEW
+  INAPPROPRIATE_CONTENT
+  HARASSMENT
+  MISLEADING_INFO
+  OFFENSIVE_LANGUAGE
+  SCAM
+  OTHER
+}
+
+enum ReportStatus {
+  PENDING
+  INVESTIGATING
+  RESOLVED
+  DISMISSED
+}
+
+// =============================================================================
+// JOB POSTING BOARD
+// =============================================================================
+
+model Job {
+  id         String    @id @default(cuid())
+  customerId String
+  customer   User      @relation("JobPoster", fields: [customerId], references: [id])
+
+  // Job Details
+  title       String
+  description String    @db.Text
+  tradeId     String
+  trade       Trade     @relation(fields: [tradeId], references: [id])
+  images      String[]
+
+  // Location
+  postcode String
+  address  String?
+
+  // Budget & Timing
+  budgetMin Int?
+  budgetMax Int?
+  timeframe String? // "ASAP", "1_WEEK", "2_WEEKS", "1_MONTH", "FLEXIBLE"
+
+  // Status
+  status    JobStatus @default(OPEN)
+  viewCount Int       @default(0)
+  expiresAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  applications JobApplication[]
+
+  @@index([status, tradeId])
+  @@index([postcode])
+  @@index([createdAt])
+}
+
+model JobApplication {
+  id        String        @id @default(cuid())
+  jobId     String
+  job       Job           @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  profileId String
+  profile   TradesProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  // Application Content
+  coverLetter       String    @db.Text
+  proposedBudget    Int?
+  proposedStartDate DateTime?
+
+  // Status
+  status   ApplicationStatus @default(PENDING)
+  viewedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([jobId, profileId])
+  @@index([status])
+  @@index([profileId])
+}
+
+enum JobStatus {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  CLOSED
+  EXPIRED
+}
+
+enum ApplicationStatus {
+  PENDING
+  VIEWED
+  SHORTLISTED
+  ACCEPTED
+  DECLINED
+  WITHDRAWN
+}

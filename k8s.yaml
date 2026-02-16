@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: builder
+  namespace: apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: builder
+  template:
+    metadata:
+      labels:
+        app: builder
+    spec:
+      nodeSelector:
+        environment: production
+      hostNetwork: false
+      containers:
+      - name: builder
+        image: 100.113.17.63:30500/builder:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://builder:builder_secure_2024@100.113.17.63:5438/builder"
+        - name: NEXTAUTH_SECRET
+          value: "builder-secret-change-in-production-2024"
+        - name: NEXTAUTH_URL
+          value: "https://builder.rafaelcardoso.co.uk"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: builder
+  namespace: apps
+spec:
+  selector:
+    app: builder
+  ports:
+  - port: 80
+    targetPort: 3000
+  type: ClusterIP
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: builder
+  namespace: apps
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`builder.rafaelcardoso.co.uk`)
+    kind: Rule
+    services:
+    - name: builder
+      port: 80
