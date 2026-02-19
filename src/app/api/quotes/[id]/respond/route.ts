@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { sendQuoteResponseNotification } from '@/lib/email';
 
 export async function POST(
   req: Request,
@@ -95,7 +96,20 @@ export async function POST(
       },
     });
 
-    // TODO: Send email notification to customer
+    // Send email notification to customer
+    if (quote.customer.email) {
+      await sendQuoteResponseNotification({
+        customerEmail: quote.customer.email,
+        customerName: quote.customer.name || 'there',
+        tradespersonName: session.user.name || 'A tradesperson',
+        businessName: profile.businessName,
+        quoteTitle: quote.title,
+        responseMessage: message,
+      }).catch((err) => {
+        // Log but don't fail the request if email fails
+        console.error('Failed to send quote response email:', err);
+      });
+    }
 
     return NextResponse.json({
       message: 'Response sent successfully',

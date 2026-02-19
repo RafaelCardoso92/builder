@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { FileText, MessageCircle, Star, Heart, Settings, LogOut, Briefcase } from 'lucide-react';
+import AccountMobileNav from './AccountMobileNav';
 
 const navItems = [
   { href: '/account/jobs', label: 'My Jobs', icon: Briefcase },
@@ -61,10 +62,16 @@ export default async function AccountLayout({
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Mobile Navigation */}
+      <AccountMobileNav
+        user={{ name: session.user.name, email: session.user.email }}
+        unreadCount={unreadCount}
+      />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-8 pb-8">
         <div className="flex flex-col md:flex-row gap-8">
-          {/* Sidebar */}
-          <aside className="md:w-64 flex-shrink-0">
+          {/* Desktop Sidebar - hidden on mobile */}
+          <aside className="hidden md:block md:w-64 flex-shrink-0">
             <div className="bg-white rounded-xl border border-slate-200 p-4">
               {/* User Info */}
               <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">

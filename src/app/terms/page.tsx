@@ -29,7 +29,7 @@ export default function TermsPage() {
               By accessing or using our Services, you agree to be bound by these Terms. If you do not agree to these Terms, you may not access or use the Services.
             </p>
             <p className="text-slate-600 mb-4">
-              Builder is operated by Builder UK Ltd, a company registered in England and Wales (Company Number: XXXXXXXX), with registered office at [Address].
+              Builder is operated by Builder UK Ltd. Company registration details are available upon request by contacting us at legal@builder.co.uk.
             </p>
 
             <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">2. Definitions</h2>
@@ -337,8 +337,7 @@ export default function TermsPage() {
             <div className="bg-slate-50 rounded-lg p-6 mb-4">
               <p className="text-slate-600">
                 <strong>Builder UK Ltd</strong><br />
-                Email: legal@builder.co.uk<br />
-                Address: [Registered Address]
+                Email: legal@builder.co.uk
               </p>
             </div>
 

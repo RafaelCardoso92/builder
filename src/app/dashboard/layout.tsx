@@ -19,6 +19,7 @@ import {
   ClipboardList,
   AlertTriangle,
 } from 'lucide-react';
+import DashboardMobileNav from './DashboardMobileNav';
 
 const navItems = [
   { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
@@ -87,8 +88,14 @@ export default async function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-slate-50">
+      {/* Mobile Navigation */}
+      <DashboardMobileNav
+        user={{ name: session.user.name, email: session.user.email }}
+        unreadCount={unreadCount}
+      />
+
       <div className="flex">
-        {/* Sidebar */}
+        {/* Desktop Sidebar */}
         <aside className="hidden md:flex md:flex-col md:w-64 md:fixed md:inset-y-0 bg-white border-r border-slate-200">
           {/* Logo */}
           <div className="flex items-center h-16 px-6 border-b border-slate-200">
@@ -148,7 +155,7 @@ export default async function DashboardLayout({
 
         {/* Main content */}
         <main className="flex-1 md:pl-64">
-          <div className="p-6 md:p-8">
+          <div className="pt-16 md:pt-0 p-4 md:p-8">
             {children}
           </div>
         </main>

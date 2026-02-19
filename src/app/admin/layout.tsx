@@ -14,6 +14,7 @@ import {
   LogOut,
   Home,
 } from 'lucide-react';
+import AdminMobileNav from './AdminMobileNav';
 
 const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
@@ -50,8 +51,16 @@ export default async function AdminLayout({
 
   return (
     <div className="min-h-screen bg-slate-100">
+      {/* Mobile Navigation */}
+      <AdminMobileNav
+        user={{ name: session.user.name, email: session.user.email }}
+        pendingVerifications={pendingVerifications}
+        pendingReviews={pendingReviews}
+        pendingReports={pendingReports}
+      />
+
       <div className="flex">
-        {/* Sidebar */}
+        {/* Desktop Sidebar */}
         <aside className="hidden md:flex md:flex-col md:w-64 md:fixed md:inset-y-0 bg-slate-900">
           {/* Logo */}
           <div className="flex items-center h-16 px-6 border-b border-slate-700">
@@ -114,7 +123,7 @@ export default async function AdminLayout({
 
         {/* Main content */}
         <main className="flex-1 md:pl-64">
-          <div className="p-6 md:p-8">{children}</div>
+          <div className="pt-16 md:pt-0 p-4 md:p-8">{children}</div>
         </main>
       </div>
     </div>
