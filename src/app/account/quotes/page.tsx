@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { MessageSquare, MapPin, Calendar, Clock, CheckCircle, ArrowRight } from 'lucide-react';
+import { MessageSquare, MapPin, Calendar, CheckCircle, ArrowRight } from 'lucide-react';
 
 async function getMyQuotes(userId: string) {
   return prisma.quoteRequest.findMany({

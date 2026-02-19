@@ -19,7 +19,7 @@ export async function PATCH(
 
     const { id } = await params;
     const body = await request.json();
-    const { action, reason, profileId } = body;
+    const { action, reason: _reason, profileId: _profileId } = body;
 
     if (!action || !['approve', 'reject', 'flag'].includes(action)) {
       return NextResponse.json(

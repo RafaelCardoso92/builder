@@ -107,7 +107,7 @@ export async function POST(req: Request) {
     }
 
     // Generate unique slug
-    let baseSlug = slugify(businessName, { lower: true, strict: true });
+    const baseSlug = slugify(businessName, { lower: true, strict: true });
     let slug = baseSlug;
     let counter = 1;
 

@@ -163,10 +163,7 @@ export default async function NewVerificationPage({
 
           {/* Form */}
           <div className="p-6">
-            <VerificationRequestForm
-              profileId={profile.id}
-              verificationType={type}
-            />
+            <VerificationRequestForm verificationType={type} />
           </div>
         </div>
       </div>

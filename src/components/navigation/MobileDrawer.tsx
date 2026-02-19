@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { X, Menu, LogOut } from 'lucide-react';
@@ -32,10 +32,15 @@ export default function MobileDrawer({
 }: MobileDrawerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const prevPathname = useRef(pathname);
 
   // Close drawer on route change
   useEffect(() => {
-    setIsOpen(false);
+    if (prevPathname.current !== pathname) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsOpen(false);
+      prevPathname.current = pathname;
+    }
   }, [pathname]);
 
   // Prevent body scroll when drawer is open

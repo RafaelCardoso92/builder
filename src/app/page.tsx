@@ -1,8 +1,19 @@
 import Link from 'next/link';
+import { Metadata } from 'next';
 import { Search, Shield, Star, MessageSquare, CheckCircle, ArrowRight, Building2, Droplet, Zap, Hammer, PaintBucket, Trees } from 'lucide-react';
+import DashboardReturnBanner from '@/components/DashboardReturnBanner';
 
 // Force dynamic rendering - no SSG
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: "Find Trusted Tradespeople Near You",
+  description: "Builder connects you with verified builders, plumbers, electricians, and other tradespeople in your area. Read real reviews, compare quotes, and hire with confidence. Free to use.",
+  openGraph: {
+    title: "Builder | Find Trusted Tradespeople Near You",
+    description: "Connect with verified builders, plumbers, electricians, and other tradespeople. Read reviews, compare quotes, and hire with confidence.",
+  },
+};
 
 const popularTrades = [
   { name: 'Builders', slug: 'building-construction', icon: Building2, description: 'Extensions, renovations & new builds' },
@@ -71,6 +82,9 @@ const testimonials = [
 export default function HomePage() {
   return (
     <>
+      {/* Return to Dashboard Banner for logged-in users */}
+      <DashboardReturnBanner />
+
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 text-white overflow-hidden">
         {/* Background Pattern */}
@@ -280,9 +294,6 @@ export default function HomePage() {
               <Link href="/register/tradesperson" className="inline-flex items-center justify-center px-6 py-3 font-medium rounded-lg bg-white text-secondary-700 hover:bg-secondary-50 transition-colors">
                 Join for Free
                 <ArrowRight className="w-5 h-5 ml-2" />
-              </Link>
-              <Link href="/pricing" className="inline-flex items-center justify-center px-6 py-3 font-medium rounded-lg border-2 border-white text-white hover:bg-white/10 transition-colors">
-                View Pricing
               </Link>
             </div>
           </div>

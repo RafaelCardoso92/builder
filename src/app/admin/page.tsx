@@ -402,12 +402,6 @@ export default async function AdminDashboardPage() {
         <div className="bg-white rounded-xl border border-slate-200 p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-slate-900">Recent Registrations</h2>
-            <Link
-              href="/admin/users"
-              className="text-sm text-primary-600 hover:text-primary-700 flex items-center gap-1"
-            >
-              View All <ArrowRight className="w-4 h-4" />
-            </Link>
           </div>
 
           <div className="space-y-3">

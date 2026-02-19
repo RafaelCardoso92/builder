@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
     const verification = await prisma.verification.create({
       data: {
         profileId: profile.id,
-        type: type as any,
+        type: type as 'IDENTITY' | 'INSURANCE' | 'PUBLIC_LIABILITY' | 'QUALIFICATION' | 'GAS_SAFE' | 'NICEIC' | 'TRUSTMARK' | 'FENSA' | 'CHAS' | 'CONSTRUCTIONLINE',
         documentUrl: documentUrl.trim(),
         status: 'PENDING',
       },
@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
 

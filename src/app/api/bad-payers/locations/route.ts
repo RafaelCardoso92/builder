@@ -1,6 +1,15 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+interface LocationWhereClause {
+  status: 'PUBLISHED';
+  isPublic: boolean;
+  latitude: { not: null };
+  longitude: { not: null };
+  locationPostcode?: { startsWith: string };
+  amountOwed?: { gte?: number; lte?: number };
+}
+
 // GET /api/bad-payers/locations - Get report locations for map
 export async function GET(req: Request) {
   try {
@@ -9,7 +18,7 @@ export async function GET(req: Request) {
     const minAmount = parseFloat(searchParams.get('minAmount') || '0');
     const maxAmount = parseFloat(searchParams.get('maxAmount') || '999999');
 
-    const where: any = {
+    const where: LocationWhereClause = {
       status: 'PUBLISHED',
       isPublic: true,
       latitude: { not: null },

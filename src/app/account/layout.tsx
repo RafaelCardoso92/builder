@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { FileText, MessageCircle, Star, Heart, Settings, LogOut, Briefcase } from 'lucide-react';
+import { FileText, MessageCircle, Star, LogOut, Briefcase } from 'lucide-react';
 import AccountMobileNav from './AccountMobileNav';
 
 const navItems = [
@@ -11,8 +11,6 @@ const navItems = [
   { href: '/account/quotes', label: 'My Quotes', icon: FileText },
   { href: '/account/messages', label: 'Messages', icon: MessageCircle },
   { href: '/account/reviews', label: 'My Reviews', icon: Star },
-  { href: '/account/favourites', label: 'Saved', icon: Heart },
-  { href: '/account/settings', label: 'Settings', icon: Settings },
 ];
 
 async function getUnreadCount(userId: string) {

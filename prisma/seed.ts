@@ -177,22 +177,30 @@ async function main() {
     }
   }
 
-  // Create admin user
-  const bcrypt = await import('bcryptjs')
-  const hashedPassword = await bcrypt.hash('admin123', 10)
+  // Create admin user (only if ADMIN_EMAIL and ADMIN_PASSWORD env vars are set)
+  const adminEmail = process.env.ADMIN_EMAIL
+  const adminPassword = process.env.ADMIN_PASSWORD
 
-  await prisma.user.upsert({
-    where: { email: 'admin@builder.co.uk' },
-    update: {},
-    create: {
-      email: 'admin@builder.co.uk',
-      password: hashedPassword,
-      name: 'Admin',
-      role: 'ADMIN',
-    },
-  })
+  if (adminEmail && adminPassword) {
+    const bcrypt = await import('bcryptjs')
+    const hashedPassword = await bcrypt.hash(adminPassword, 10)
 
-  console.log('Created admin user: admin@builder.co.uk / admin123')
+    await prisma.user.upsert({
+      where: { email: adminEmail },
+      update: {},
+      create: {
+        email: adminEmail,
+        password: hashedPassword,
+        name: 'Admin',
+        role: 'ADMIN',
+      },
+    })
+
+    console.log(`Created admin user: ${adminEmail}`)
+  } else {
+    console.log('Skipping admin user creation (ADMIN_EMAIL and ADMIN_PASSWORD not set)')
+  }
+
   console.log('Seeding complete!')
 }
 

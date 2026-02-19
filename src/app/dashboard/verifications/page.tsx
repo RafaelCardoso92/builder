@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import {
-  Shield,
   CheckCircle,
   Clock,
   XCircle,

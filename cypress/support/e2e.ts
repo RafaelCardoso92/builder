@@ -1,7 +1,8 @@
 /// <reference types="cypress" />
 
-// Custom commands
+// Custom commands - augment existing Cypress interface
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     interface Chainable {
       login(email: string, password: string): Chainable<void>;
@@ -28,7 +29,7 @@ Cypress.Commands.add('logout', () => {
 });
 
 // Prevent uncaught exceptions from failing tests
-Cypress.on('uncaught:exception', (err, runnable) => {
+Cypress.on('uncaught:exception', (_err, _runnable) => {
   // Returning false prevents Cypress from failing the test
   return false;
 });

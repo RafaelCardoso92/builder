@@ -4,6 +4,18 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { filterReportContent, generateFilterErrorMessage } from '@/lib/content-filter';
 
+type BadPayerStatus = 'DRAFT' | 'PENDING_REVIEW' | 'PUBLISHED' | 'DISPUTED' | 'RESOLVED' | 'REJECTED' | 'REMOVED' | 'EXPIRED';
+
+interface BadPayerWhereClause {
+  status?: BadPayerStatus;
+  isPublic?: boolean;
+  OR?: Array<{
+    workDescription?: { contains: string; mode: 'insensitive' };
+    locationArea?: { contains: string; mode: 'insensitive' };
+  }>;
+  locationPostcode?: { startsWith: string };
+}
+
 // GET /api/bad-payers - List published reports (public) or all reports (admin)
 export async function GET(req: Request) {
   try {
@@ -19,14 +31,14 @@ export async function GET(req: Request) {
     const isAdmin = session?.user?.role === 'ADMIN';
 
     // Build where clause
-    const where: any = {};
+    const where: BadPayerWhereClause = {};
 
     // Public users can only see published, public reports
     if (!isAdmin) {
       where.status = 'PUBLISHED';
       where.isPublic = true;
     } else if (status) {
-      where.status = status;
+      where.status = status as BadPayerStatus;
     }
 
     if (search) {

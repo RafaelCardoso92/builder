@@ -51,7 +51,7 @@ function LoginForm() {
         router.push(redirectUrl);
         router.refresh();
       }
-    } catch (error) {
+    } catch {
       setErrorMessage("An unexpected error occurred");
     } finally {
       setIsLoading(false);
@@ -111,14 +111,11 @@ function LoginForm() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center">
           <label className="flex items-center">
             <input type="checkbox" className="w-4 h-4 text-primary-600 border-slate-300 rounded focus:ring-primary-500" />
             <span className="ml-2 text-sm text-slate-600">Remember me</span>
           </label>
-          <Link href="/forgot-password" className="text-sm text-primary-600 hover:text-primary-700">
-            Forgot password?
-          </Link>
         </div>
 
         <button

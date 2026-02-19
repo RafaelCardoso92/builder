@@ -16,11 +16,21 @@ interface SearchParams {
   page?: string;
 }
 
+interface BadPayerWhereClause {
+  status: 'PUBLISHED';
+  isPublic: boolean;
+  OR?: Array<{
+    workDescription?: { contains: string; mode: 'insensitive' };
+    locationArea?: { contains: string; mode: 'insensitive' };
+  }>;
+  locationPostcode?: { startsWith: string };
+}
+
 async function getPublicReports(params: SearchParams) {
   const page = Math.max(1, parseInt(params.page || '1'));
   const limit = 20;
 
-  const where: any = {
+  const where: BadPayerWhereClause = {
     status: 'PUBLISHED',
     isPublic: true,
   };

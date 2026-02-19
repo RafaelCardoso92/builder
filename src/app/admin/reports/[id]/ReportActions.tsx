@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, CheckCircle, XCircle, AlertTriangle, Ban } from 'lucide-react';
+import { Search, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 
 interface ReportActionsProps {
   reportId: string;

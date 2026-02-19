@@ -96,7 +96,7 @@ export async function PATCH(
       'status',
     ];
 
-    const updateData: any = {};
+    const updateData: Record<string, string | number | string[] | null> = {};
     for (const field of allowedFields) {
       if (body[field] !== undefined) {
         if (field === 'budgetMin' || field === 'budgetMax') {

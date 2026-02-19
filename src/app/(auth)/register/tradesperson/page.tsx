@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Eye, EyeOff, Mail, Lock, User, Building2, Phone, MapPin, AlertCircle, CheckCircle, ArrowRight, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, Building2, Phone, AlertCircle, CheckCircle, ArrowRight, ArrowLeft } from "lucide-react";
 
 interface Trade {
   id: string;
@@ -127,8 +127,8 @@ export default function TradespersonRegisterPage() {
       setTimeout(() => {
         router.push("/login?registered=true");
       }, 2000);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Registration failed");
     } finally {
       setIsLoading(false);
     }

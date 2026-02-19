@@ -17,12 +17,15 @@ import {
 } from 'lucide-react';
 
 async function getReports(status?: string, targetType?: string) {
-  const where: any = {};
+  const where: {
+    status?: 'PENDING' | 'INVESTIGATING' | 'RESOLVED' | 'DISMISSED';
+    targetType?: 'REVIEW' | 'PROFILE' | 'MESSAGE';
+  } = {};
   if (status && status !== 'all') {
-    where.status = status;
+    where.status = status as 'PENDING' | 'INVESTIGATING' | 'RESOLVED' | 'DISMISSED';
   }
   if (targetType && targetType !== 'all') {
-    where.targetType = targetType;
+    where.targetType = targetType as 'REVIEW' | 'PROFILE' | 'MESSAGE';
   }
 
   const reports = await prisma.report.findMany({

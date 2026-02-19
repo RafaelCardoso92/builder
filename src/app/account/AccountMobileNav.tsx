@@ -1,6 +1,6 @@
 'use client';
 
-import { FileText, MessageCircle, Star, Heart, Settings, Briefcase } from 'lucide-react';
+import { FileText, MessageCircle, Star, Briefcase } from 'lucide-react';
 import MobileDrawer from '@/components/navigation/MobileDrawer';
 
 const navItems = [
@@ -8,8 +8,6 @@ const navItems = [
   { href: '/account/quotes', label: 'My Quotes', icon: FileText },
   { href: '/account/messages', label: 'Messages', icon: MessageCircle },
   { href: '/account/reviews', label: 'My Reviews', icon: Star },
-  { href: '/account/favourites', label: 'Saved', icon: Heart },
-  { href: '/account/settings', label: 'Settings', icon: Settings },
 ];
 
 interface AccountMobileNavProps {

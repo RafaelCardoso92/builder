@@ -45,7 +45,7 @@ export default async function ProfilePage() {
         </p>
       </div>
 
-      <ProfileForm profile={profile} allTrades={allTrades} userId={session.user.id} />
+      <ProfileForm profile={profile} allTrades={allTrades} />
     </div>
   );
 }

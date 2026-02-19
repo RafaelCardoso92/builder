@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 
 async function getVerifications(status?: string) {
-  const where = status && status !== 'all' ? { status: status as any } : {};
+  const where = status && status !== 'all' ? { status: status as 'PENDING' | 'APPROVED' | 'REJECTED' | 'EXPIRED' } : {};
 
   const verifications = await prisma.verification.findMany({
     where,

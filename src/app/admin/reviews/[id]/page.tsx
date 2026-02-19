@@ -8,7 +8,6 @@ import {
   Star,
   User,
   Building2,
-  Mail,
   Calendar,
   Briefcase,
   PoundSterling,

@@ -30,9 +30,9 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const status = searchParams.get('status');
 
-    const where: any = { profileId: profile.id };
+    const where: { profileId: string; status?: 'PENDING' | 'VIEWED' | 'SHORTLISTED' | 'ACCEPTED' | 'DECLINED' | 'WITHDRAWN' } = { profileId: profile.id };
     if (status) {
-      where.status = status;
+      where.status = status as 'PENDING' | 'VIEWED' | 'SHORTLISTED' | 'ACCEPTED' | 'DECLINED' | 'WITHDRAWN';
     }
 
     const applications = await prisma.jobApplication.findMany({

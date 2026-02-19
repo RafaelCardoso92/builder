@@ -9,7 +9,6 @@ import {
   MapPin,
   Clock,
   PoundSterling,
-  Calendar,
   CheckCircle,
   XCircle,
   Bookmark,
@@ -17,9 +16,11 @@ import {
   ExternalLink,
 } from 'lucide-react';
 
+import type { LucideIcon } from 'lucide-react';
+
 const statusConfig: Record<
   string,
-  { label: string; color: string; icon: any }
+  { label: string; color: string; icon: LucideIcon }
 > = {
   PENDING: {
     label: 'Pending',

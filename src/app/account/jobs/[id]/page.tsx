@@ -12,10 +12,6 @@ import {
   Users,
   ArrowLeft,
   Eye,
-  Star,
-  Shield,
-  Phone,
-  Mail,
 } from 'lucide-react';
 import ApplicationCard from './ApplicationCard';
 import JobActions from './JobActions';

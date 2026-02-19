@@ -3,6 +3,21 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
+type JobStatus = 'OPEN' | 'IN_PROGRESS' | 'COMPLETED' | 'CLOSED' | 'EXPIRED';
+
+interface JobWhereClause {
+  status?: JobStatus;
+  OR?: Array<{ expiresAt: null } | { expiresAt: { gt: Date } }>;
+  trade?: {
+    OR: Array<{
+      name?: { contains: string; mode: 'insensitive' };
+      slug?: { contains: string };
+      parent?: { name: { contains: string; mode: 'insensitive' } };
+    }>;
+  };
+  postcode?: { startsWith: string };
+}
+
 // GET /api/jobs - List jobs with filters
 export async function GET(req: Request) {
   try {
@@ -16,7 +31,7 @@ export async function GET(req: Request) {
     // Bounds check for pagination
     const safePage = Math.max(1, Math.min(page, 1000));
 
-    const where: any = {};
+    const where: JobWhereClause = {};
 
     // Status filter - also filter out expired jobs
     if (status === 'OPEN') {
@@ -26,7 +41,7 @@ export async function GET(req: Request) {
         { expiresAt: { gt: new Date() } },
       ];
     } else if (status) {
-      where.status = status;
+      where.status = status as JobStatus;
     }
 
     // Trade filter (by name or parent name)

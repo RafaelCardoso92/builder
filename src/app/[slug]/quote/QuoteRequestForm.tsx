@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Send, AlertCircle, CheckCircle, Upload, X } from "lucide-react";
+import { Send, AlertCircle, CheckCircle, X } from "lucide-react";
 
 interface QuoteRequestFormProps {
   profile: {
@@ -17,7 +16,6 @@ interface QuoteRequestFormProps {
     }>;
   };
   isLoggedIn: boolean;
-  userId?: string;
 }
 
 const timeframes = [
@@ -38,8 +36,7 @@ const budgetRanges = [
   { value: "NOT_SURE", label: "Not sure yet" },
 ];
 
-export default function QuoteRequestForm({ profile, isLoggedIn, userId }: QuoteRequestFormProps) {
-  const router = useRouter();
+export default function QuoteRequestForm({ profile, isLoggedIn }: QuoteRequestFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
@@ -102,8 +99,8 @@ export default function QuoteRequestForm({ profile, isLoggedIn, userId }: QuoteR
       }
 
       setSuccess(true);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to submit quote request");
     } finally {
       setIsLoading(false);
     }

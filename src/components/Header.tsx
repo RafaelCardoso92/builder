@@ -24,12 +24,21 @@ export default function Header() {
   const isTradesperson = session?.user?.role === 'TRADESPERSON';
   const isAdmin = session?.user?.role === 'ADMIN';
 
+  // Determine logo link based on user role
+  const logoHref = isLoggedIn
+    ? isAdmin
+      ? '/admin'
+      : isTradesperson
+        ? '/dashboard'
+        : '/account/jobs'
+    : '/';
+
   return (
     <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
+          {/* Logo - links to dashboard when logged in */}
+          <Link href={logoHref} className="flex items-center gap-2">
             <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">B</span>
             </div>

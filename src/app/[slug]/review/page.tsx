@@ -87,10 +87,7 @@ export default async function WriteReviewPage({
 
           {/* Form */}
           <div className="p-6">
-            <ReviewForm 
-              profile={profile}
-              userId={session.user.id}
-            />
+            <ReviewForm profile={profile} />
           </div>
         </div>
       </div>

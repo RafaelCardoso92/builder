@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Metadata } from 'next';
 import { prisma } from '@/lib/prisma';
 import {
   Search,
@@ -9,6 +10,15 @@ import {
   Users,
   Plus,
 } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: "Job Board - Find Work Near You",
+  description: "Browse jobs posted by homeowners looking for tradespeople. Apply to local jobs in building, plumbing, electrical work, and more. Free to browse and apply.",
+  openGraph: {
+    title: "Job Board | Builder",
+    description: "Browse and apply to local trade jobs. Find work in building, plumbing, electrical, and more.",
+  },
+};
 
 interface SearchParams {
   trade?: string;
@@ -24,11 +34,23 @@ const timeframeLabels: Record<string, string> = {
   FLEXIBLE: 'Flexible',
 };
 
+interface JobWhereClause {
+  status: 'OPEN' | 'IN_PROGRESS' | 'COMPLETED' | 'CLOSED' | 'EXPIRED';
+  trade?: {
+    OR: Array<{
+      name?: { contains: string; mode: 'insensitive' };
+      slug?: { contains: string };
+      parent?: { name: { contains: string; mode: 'insensitive' } };
+    }>;
+  };
+  postcode?: { startsWith: string };
+}
+
 async function getJobs(params: SearchParams) {
   const page = parseInt(params.page || '1');
   const perPage = 10;
 
-  const where: any = {
+  const where: JobWhereClause = {
     status: 'OPEN',
   };
 

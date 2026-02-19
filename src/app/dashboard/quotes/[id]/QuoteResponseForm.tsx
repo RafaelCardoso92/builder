@@ -44,8 +44,8 @@ export default function QuoteResponseForm({ quoteId }: QuoteResponseFormProps) {
 
       setSuccess(true);
       router.refresh();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to send response");
     } finally {
       setIsLoading(false);
     }

@@ -1,6 +1,16 @@
 import Link from 'next/link';
-import { Search, MapPin, Star, Shield, Clock, Phone } from 'lucide-react';
+import { Metadata } from 'next';
+import { Search, MapPin, Star, Shield, Clock } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
+
+export const metadata: Metadata = {
+  title: "Search Tradespeople",
+  description: "Search for verified tradespeople in your area. Find builders, plumbers, electricians, and more. Read reviews and compare quotes from trusted professionals.",
+  openGraph: {
+    title: "Search Tradespeople | Builder",
+    description: "Find verified tradespeople in your area. Read reviews and compare quotes from trusted professionals.",
+  },
+};
 
 interface SearchParams {
   trade?: string;
@@ -8,12 +18,28 @@ interface SearchParams {
   page?: string;
 }
 
+interface ProfileWhereClause {
+  isActive: boolean;
+  trades?: {
+    some: {
+      trade: {
+        OR: Array<{
+          name?: { contains: string; mode: 'insensitive' };
+          slug?: { contains: string };
+          parent?: { name: { contains: string; mode: 'insensitive' } };
+        }>;
+      };
+    };
+  };
+  postcode?: { startsWith: string };
+}
+
 async function searchTradespeople(params: SearchParams) {
   const { trade, postcode, page = '1' } = params;
   const perPage = 10;
   const skip = (parseInt(page) - 1) * perPage;
 
-  const where: any = {
+  const where: ProfileWhereClause = {
     isActive: true,
   };
 

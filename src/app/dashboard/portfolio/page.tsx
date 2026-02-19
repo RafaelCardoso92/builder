@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { Plus, Image as ImageIcon, Trash2, Edit } from 'lucide-react';
+import { Plus, Image as ImageIcon, Edit } from 'lucide-react';
 import DeletePortfolioButton from './DeleteButton';
 
 async function getPortfolio(userId: string) {

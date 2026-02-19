@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
     const existingReport = await prisma.report.findFirst({
       where: {
         reporterId: session.user.id,
-        targetType: targetType as any,
+        targetType: targetType as 'REVIEW' | 'PROFILE' | 'MESSAGE',
         targetId,
         status: { in: ['PENDING', 'INVESTIGATING'] },
       },
@@ -95,9 +95,9 @@ export async function POST(request: NextRequest) {
     const report = await prisma.report.create({
       data: {
         reporterId: session.user.id,
-        targetType: targetType as any,
+        targetType: targetType as 'REVIEW' | 'PROFILE' | 'MESSAGE',
         targetId,
-        reason: reason as any,
+        reason: reason as 'SPAM' | 'FAKE_REVIEW' | 'INAPPROPRIATE_CONTENT' | 'HARASSMENT' | 'MISLEADING_INFO' | 'OFFENSIVE_LANGUAGE' | 'SCAM' | 'OTHER',
         description: description?.trim() || null,
       },
     });
@@ -150,12 +150,15 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status');
     const targetType = searchParams.get('targetType');
 
-    const where: any = {};
+    const where: {
+      status?: 'PENDING' | 'INVESTIGATING' | 'RESOLVED' | 'DISMISSED';
+      targetType?: 'REVIEW' | 'PROFILE' | 'MESSAGE';
+    } = {};
     if (status && status !== 'all') {
-      where.status = status;
+      where.status = status as 'PENDING' | 'INVESTIGATING' | 'RESOLVED' | 'DISMISSED';
     }
     if (targetType && targetType !== 'all') {
-      where.targetType = targetType;
+      where.targetType = targetType as 'REVIEW' | 'PROFILE' | 'MESSAGE';
     }
 
     const reports = await prisma.report.findMany({

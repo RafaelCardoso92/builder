@@ -12,8 +12,6 @@ import {
   Star,
   Shield,
   CreditCard,
-  BarChart3,
-  Settings,
   LogOut,
   Briefcase,
   ClipboardList,
@@ -31,10 +29,8 @@ const navItems = [
   { href: '/dashboard/messages', label: 'Messages', icon: MessageCircle },
   { href: '/dashboard/reviews', label: 'Reviews', icon: Star },
   { href: '/dashboard/verifications', label: 'Verifications', icon: Shield },
-  { href: '/dashboard/analytics', label: 'Analytics', icon: BarChart3 },
   { href: '/dashboard/bad-payers', label: 'Bad Payers', icon: AlertTriangle },
   { href: '/dashboard/subscription', label: 'Subscription', icon: CreditCard },
-  { href: '/dashboard/settings', label: 'Settings', icon: Settings },
 ];
 
 async function getUnreadCount(userId: string) {
@@ -99,7 +95,7 @@ export default async function DashboardLayout({
         <aside className="hidden md:flex md:flex-col md:w-64 md:fixed md:inset-y-0 bg-white border-r border-slate-200">
           {/* Logo */}
           <div className="flex items-center h-16 px-6 border-b border-slate-200">
-            <Link href="/" className="flex items-center gap-2">
+            <Link href="/dashboard" className="flex items-center gap-2">
               <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold">B</span>
               </div>

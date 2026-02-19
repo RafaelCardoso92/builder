@@ -61,8 +61,8 @@ export default function RegisterPage() {
       setTimeout(() => {
         router.push("/login?registered=true");
       }, 2000);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Registration failed");
     } finally {
       setIsLoading(false);
     }

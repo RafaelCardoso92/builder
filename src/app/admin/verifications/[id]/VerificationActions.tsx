@@ -11,7 +11,7 @@ interface VerificationActionsProps {
 
 export default function VerificationActions({
   verificationId,
-  profileId,
+  profileId: _profileId,
 }: VerificationActionsProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);

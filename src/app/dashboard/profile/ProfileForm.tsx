@@ -10,13 +10,30 @@ interface Trade {
   children?: Trade[];
 }
 
-interface ProfileFormProps {
-  profile: any;
-  allTrades: Trade[];
-  userId: string;
+interface TradesProfileTrade {
+  tradeId: string;
 }
 
-export default function ProfileForm({ profile, allTrades, userId }: ProfileFormProps) {
+interface Profile {
+  businessName?: string | null;
+  tagline?: string | null;
+  description?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  website?: string | null;
+  address?: string | null;
+  city?: string | null;
+  postcode?: string | null;
+  coverageRadius?: number | null;
+  trades?: TradesProfileTrade[];
+}
+
+interface ProfileFormProps {
+  profile: Profile | null;
+  allTrades: Trade[];
+}
+
+export default function ProfileForm({ profile, allTrades }: ProfileFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
@@ -32,7 +49,7 @@ export default function ProfileForm({ profile, allTrades, userId }: ProfileFormP
     city: profile?.city || "",
     postcode: profile?.postcode || "",
     coverageRadius: profile?.coverageRadius?.toString() || "25",
-    selectedTrades: profile?.trades?.map((t: any) => t.tradeId) || [],
+    selectedTrades: profile?.trades?.map((t) => t.tradeId) || [],
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -68,8 +85,8 @@ export default function ProfileForm({ profile, allTrades, userId }: ProfileFormP
 
       setMessage({ type: "success", text: "Profile saved successfully" });
       router.refresh();
-    } catch (err: any) {
-      setMessage({ type: "error", text: err.message });
+    } catch (err) {
+      setMessage({ type: "error", text: err instanceof Error ? err.message : "Failed to save profile" });
     } finally {
       setIsLoading(false);
     }

@@ -15,7 +15,9 @@ import {
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
-const statusConfig: Record<string, { label: string; color: string; icon: any }> = {
+import type { LucideIcon } from 'lucide-react';
+
+const statusConfig: Record<string, { label: string; color: string; icon: LucideIcon }> = {
   DRAFT: { label: 'Draft', color: 'bg-slate-100 text-slate-700', icon: FileText },
   PENDING_REVIEW: { label: 'Pending Review', color: 'bg-yellow-100 text-yellow-700', icon: Clock },
   PUBLISHED: { label: 'Published', color: 'bg-green-100 text-green-700', icon: CheckCircle },

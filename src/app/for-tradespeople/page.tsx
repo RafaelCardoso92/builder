@@ -1,5 +1,15 @@
 import Link from 'next/link';
+import { Metadata } from 'next';
 import { Users, Star, TrendingUp, Shield, MessageSquare, BarChart3, CheckCircle, ArrowRight, Crown } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: "For Tradespeople - Grow Your Business",
+  description: "Join Builder to reach more customers, build your reputation with verified reviews, and grow your trade business. Free registration for all tradespeople.",
+  openGraph: {
+    title: "For Tradespeople | Builder",
+    description: "Join Builder to reach more customers and grow your trade business. Free registration.",
+  },
+};
 
 const benefits = [
   {

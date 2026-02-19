@@ -143,7 +143,7 @@ export async function POST(request: NextRequest) {
         await handleCheckoutCompleted(event.data.object as Stripe.Checkout.Session);
         break;
       default:
-        console.log('Unhandled event type:', event.type);
+        // Stripe sends many event types - we only process the ones above
     }
 
     return NextResponse.json({ received: true });

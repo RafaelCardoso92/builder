@@ -100,7 +100,7 @@ export async function PATCH(
     }
 
     const body = await req.json();
-    const updateData: any = {};
+    const updateData: Record<string, string | boolean | Date | null> = {};
 
     // Admin can update status
     if (isAdmin) {

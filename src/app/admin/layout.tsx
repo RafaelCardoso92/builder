@@ -8,9 +8,6 @@ import {
   Shield,
   Star,
   Flag,
-  Users,
-  FolderTree,
-  Settings,
   LogOut,
   Home,
 } from 'lucide-react';
@@ -21,9 +18,6 @@ const navItems = [
   { href: '/admin/verifications', label: 'Verifications', icon: Shield },
   { href: '/admin/reviews', label: 'Reviews', icon: Star },
   { href: '/admin/reports', label: 'Reports', icon: Flag },
-  { href: '/admin/users', label: 'Users', icon: Users },
-  { href: '/admin/trades', label: 'Trade Categories', icon: FolderTree },
-  { href: '/admin/settings', label: 'Settings', icon: Settings },
 ];
 
 async function getPendingCounts() {

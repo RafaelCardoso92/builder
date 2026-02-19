@@ -10,7 +10,6 @@ interface ReviewFormProps {
     businessName: string;
     slug: string;
   };
-  userId: string;
 }
 
 const workTypes = [
@@ -76,7 +75,7 @@ function StarRating({
   );
 }
 
-export default function ReviewForm({ profile, userId }: ReviewFormProps) {
+export default function ReviewForm({ profile }: ReviewFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');

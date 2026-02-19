@@ -1,8 +1,18 @@
 import Link from 'next/link';
+import { Metadata } from 'next';
 import { ArrowLeft, Building2, Droplet, Zap, Hammer, PaintBucket, Trees, Home, Wrench, Wind, DoorOpen, Sparkles, HardHat } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: "Browse All Trades",
+  description: "Explore all trade categories including builders, plumbers, electricians, carpenters, decorators, landscapers, and more. Find the right professional for your project.",
+  openGraph: {
+    title: "Browse All Trades | Builder",
+    description: "Explore all trade categories and find the right professional for your project.",
+  },
+};
 
 async function getTrades() {
   const trades = await prisma.trade.findMany({
@@ -17,7 +27,9 @@ async function getTrades() {
   return trades;
 }
 
-const iconMap: Record<string, any> = {
+import type { LucideIcon } from 'lucide-react';
+
+const iconMap: Record<string, LucideIcon> = {
   'building-construction': Building2,
   'plumbing-heating': Droplet,
   'electrical': Zap,

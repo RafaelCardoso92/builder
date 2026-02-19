@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 
 async function getReviews(status?: string) {
-  const where = status && status !== 'all' ? { status: status as any } : {};
+  const where = status && status !== 'all' ? { status: status as 'PENDING' | 'APPROVED' | 'REJECTED' | 'FLAGGED' } : {};
 
   const reviews = await prisma.review.findMany({
     where,

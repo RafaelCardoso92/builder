@@ -2,22 +2,19 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Upload, FileText, X, CheckCircle } from 'lucide-react';
+import { FileText, CheckCircle } from 'lucide-react';
 
 interface VerificationRequestFormProps {
-  profileId: string;
   verificationType: string;
 }
 
 export default function VerificationRequestForm({
-  profileId,
   verificationType,
 }: VerificationRequestFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [documentUrl, setDocumentUrl] = useState('');
-  const [fileName, setFileName] = useState('');
 
   // For now, we'll use a simple URL input
   // In production, this would be a file upload to S3/R2
@@ -84,15 +81,17 @@ export default function VerificationRequestForm({
         </p>
       </div>
 
-      {/* File Upload Placeholder - Would integrate with S3/R2 in production */}
-      <div className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center">
-        <Upload className="w-10 h-10 text-slate-400 mx-auto mb-3" />
-        <p className="text-slate-600 mb-1">
-          Direct file upload coming soon
-        </p>
-        <p className="text-sm text-slate-500">
-          For now, please use a cloud storage link above
-        </p>
+      {/* Supported document types */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="flex items-start gap-3">
+          <FileText className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+          <div>
+            <p className="text-sm font-medium text-blue-900">Supported documents</p>
+            <p className="text-sm text-blue-700 mt-1">
+              PDF, JPG, or PNG files. Make sure the document is clearly readable and shows all relevant information including expiry dates where applicable.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Terms */}

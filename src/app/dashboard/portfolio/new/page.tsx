@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Save, Upload, X, AlertCircle, CheckCircle } from "lucide-react";
+import { ArrowLeft, Save, X, AlertCircle, CheckCircle } from "lucide-react";
 
 export default function NewPortfolioPage() {
   const router = useRouter();
@@ -58,8 +58,8 @@ export default function NewPortfolioPage() {
       setTimeout(() => {
         router.push("/dashboard/portfolio");
       }, 1000);
-    } catch (err: any) {
-      setMessage({ type: "error", text: err.message });
+    } catch (err) {
+      setMessage({ type: "error", text: err instanceof Error ? err.message : "Failed to create project" });
     } finally {
       setIsLoading(false);
     }
