@@ -27,12 +27,12 @@ describe('Search & Profiles', () => {
 
   describe('Tradesperson Profile', () => {
     it('displays profile page', () => {
-      cy.visit('/johns-plumbing-services');
+      cy.visit('/john-smith-plumbing');
       cy.contains("John").should('be.visible');
     });
 
     it('shows contact option', () => {
-      cy.visit('/johns-plumbing-services');
+      cy.visit('/john-smith-plumbing');
       cy.contains(/quote|contact/i).should('be.visible');
     });
   });
@@ -40,7 +40,7 @@ describe('Search & Profiles', () => {
   describe('Quote Request', () => {
     it('shows quote form for logged in user', () => {
       cy.login('customer@test.com', 'password123');
-      cy.visit('/johns-plumbing-services/quote');
+      cy.visit('/john-smith-plumbing/quote');
       cy.get('form').should('be.visible');
     });
   });

@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
@@ -142,12 +143,13 @@ const tradeCategories = [
 ]
 
 async function main() {
-  console.log('Seeding trades...')
+  console.log('Seeding database...')
 
+  // Seed trade categories
+  console.log('Creating trade categories...')
   for (let i = 0; i < tradeCategories.length; i++) {
     const category = tradeCategories[i]
 
-    // Create parent trade
     const parent = await prisma.trade.upsert({
       where: { slug: category.slug },
       update: {},
@@ -159,9 +161,8 @@ async function main() {
       },
     })
 
-    console.log(`Created category: ${parent.name}`)
+    console.log(`  Created category: ${parent.name}`)
 
-    // Create children
     for (let j = 0; j < category.children.length; j++) {
       const child = category.children[j]
       await prisma.trade.upsert({
@@ -177,28 +178,116 @@ async function main() {
     }
   }
 
-  // Create admin user (only if ADMIN_EMAIL and ADMIN_PASSWORD env vars are set)
-  const adminEmail = process.env.ADMIN_EMAIL
-  const adminPassword = process.env.ADMIN_PASSWORD
+  // Create test users for Cypress tests
+  console.log('Creating test users...')
 
-  if (adminEmail && adminPassword) {
-    const bcrypt = await import('bcryptjs')
-    const hashedPassword = await bcrypt.hash(adminPassword, 10)
+  // 1. Test Customer
+  const customerPassword = await bcrypt.hash('password123', 10)
+  const customer = await prisma.user.upsert({
+    where: { email: 'customer@test.com' },
+    update: {},
+    create: {
+      email: 'customer@test.com',
+      password: customerPassword,
+      name: 'Test Customer',
+      role: 'CUSTOMER',
+    },
+  })
+  console.log(`  Created customer: ${customer.email}`)
 
+  // 2. Test Tradesperson (Plumber)
+  const plumberPassword = await bcrypt.hash('password123', 10)
+  const plumber = await prisma.user.upsert({
+    where: { email: 'plumber@test.com' },
+    update: {},
+    create: {
+      email: 'plumber@test.com',
+      password: plumberPassword,
+      name: 'John Smith',
+      role: 'TRADESPERSON',
+    },
+  })
+  console.log(`  Created tradesperson: ${plumber.email}`)
+
+  // Get the plumber trade for the profile
+  const plumberTrade = await prisma.trade.findUnique({
+    where: { slug: 'plumber' },
+  })
+
+  // Create tradesperson profile
+  if (plumberTrade) {
+    const existingProfile = await prisma.tradesProfile.findUnique({
+      where: { userId: plumber.id },
+    })
+
+    if (!existingProfile) {
+      const profile = await prisma.tradesProfile.create({
+        data: {
+          userId: plumber.id,
+          businessName: 'John Smith Plumbing',
+          slug: 'john-smith-plumbing',
+          tagline: 'Professional plumbing services',
+          description: 'Experienced plumber offering reliable services for all your plumbing needs.',
+          phone: '07700 900123',
+          email: 'plumber@test.com',
+          city: 'London',
+          postcode: 'SW1A 1AA',
+          coverageRadius: 25,
+          isActive: true,
+          isVerified: true,
+          verifiedAt: new Date(),
+          subscriptionTier: 'FREE',
+          averageRating: 4.5,
+          reviewCount: 10,
+          responseRate: 95,
+          responseTime: 'Within 1 hour',
+        },
+      })
+
+      // Link profile to plumber trade
+      await prisma.tradesProfileTrade.create({
+        data: {
+          profileId: profile.id,
+          tradeId: plumberTrade.id,
+          yearsExperience: 10,
+        },
+      })
+
+      console.log(`  Created profile: ${profile.businessName}`)
+    }
+  }
+
+  // 3. Test Admin
+  const adminPassword = await bcrypt.hash('admin123', 10)
+  const admin = await prisma.user.upsert({
+    where: { email: 'admin@builder.co.uk' },
+    update: {},
+    create: {
+      email: 'admin@builder.co.uk',
+      password: adminPassword,
+      name: 'Admin User',
+      role: 'ADMIN',
+    },
+  })
+  console.log(`  Created admin: ${admin.email}`)
+
+  // Create admin user from env vars if provided (for production)
+  const envAdminEmail = process.env.ADMIN_EMAIL
+  const envAdminPassword = process.env.ADMIN_PASSWORD
+
+  if (envAdminEmail && envAdminPassword && envAdminEmail !== 'admin@builder.co.uk') {
+    const hashedEnvPassword = await bcrypt.hash(envAdminPassword, 10)
     await prisma.user.upsert({
-      where: { email: adminEmail },
+      where: { email: envAdminEmail },
       update: {},
       create: {
-        email: adminEmail,
-        password: hashedPassword,
+        email: envAdminEmail,
+        password: hashedEnvPassword,
         name: 'Admin',
         role: 'ADMIN',
       },
     })
-
-    console.log(`Created admin user: ${adminEmail}`)
-  } else {
-    console.log('Skipping admin user creation (ADMIN_EMAIL and ADMIN_PASSWORD not set)')
+    console.log(`  Created env admin: ${envAdminEmail}`)
   }
 
   console.log('Seeding complete!')
