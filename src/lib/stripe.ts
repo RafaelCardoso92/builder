@@ -8,59 +8,25 @@ export const SUBSCRIPTION_TIERS = {
     name: 'Free',
     price: 0,
     priceId: null,
+    showAds: true,
     features: [
-      'Basic profile listing',
-      'Up to 5 portfolio photos',
-      '10 quote requests per month',
-      'Standard search placement',
-      '1 verification badge',
-    ],
-    limits: {
-      portfolioPhotos: 5,
-      quoteRequestsPerMonth: 10,
-      verificationBadges: 1,
-      jobApplicationsPerMonth: 5,
-    },
-  },
-  PRO: {
-    name: 'Pro',
-    price: 29,
-    priceId: process.env.STRIPE_PRO_PRICE_ID,
-    features: [
-      'Everything in Free',
-      'Up to 20 portfolio photos',
-      'Unlimited quote requests',
-      'Boosted search placement',
-      'Up to 3 verification badges',
-      'Response templates',
-      'Basic analytics',
-    ],
-    limits: {
-      portfolioPhotos: 20,
-      quoteRequestsPerMonth: -1, // unlimited
-      verificationBadges: 3,
-      jobApplicationsPerMonth: 20,
-    },
-  },
-  PREMIUM: {
-    name: 'Premium',
-    price: 59,
-    priceId: process.env.STRIPE_PREMIUM_PRICE_ID,
-    features: [
-      'Everything in Pro',
+      'Full profile listing',
       'Unlimited portfolio photos',
-      'Top search placement',
-      'Unlimited verification badges',
-      'Featured listing badge',
-      'Advanced analytics',
-      'Priority support',
+      'Unlimited quote requests',
+      'Advertisements displayed',
     ],
-    limits: {
-      portfolioPhotos: -1, // unlimited
-      quoteRequestsPerMonth: -1,
-      verificationBadges: -1,
-      jobApplicationsPerMonth: -1, // unlimited
-    },
+  },
+  PAID: {
+    name: 'Ad-Free',
+    price: 10,
+    priceId: process.env.STRIPE_PAID_PRICE_ID,
+    showAds: false,
+    features: [
+      'Full profile listing',
+      'Unlimited portfolio photos',
+      'Unlimited quote requests',
+      'No advertisements',
+    ],
   },
 } as const;
 

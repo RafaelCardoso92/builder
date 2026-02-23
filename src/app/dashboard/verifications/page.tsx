@@ -10,9 +10,7 @@ import {
   AlertTriangle,
   Plus,
   FileText,
-  Crown,
 } from 'lucide-react';
-import { SUBSCRIPTION_TIERS } from '@/lib/stripe';
 
 async function getVerifications(userId: string) {
   const profile = await prisma.tradesProfile.findUnique({
@@ -107,9 +105,7 @@ export default async function DashboardVerificationsPage() {
     redirect('/dashboard/profile');
   }
 
-  const tierLimits = SUBSCRIPTION_TIERS[profile.subscriptionTier].limits;
   const approvedCount = profile.verifications.filter(v => v.status === 'APPROVED').length;
-  const canAddMore = tierLimits.verificationBadges === -1 || approvedCount < tierLimits.verificationBadges;
 
   // Get existing verification types
   const existingTypes = new Set(profile.verifications.map(v => v.type as string));
@@ -124,24 +120,11 @@ export default async function DashboardVerificationsPage() {
         </p>
       </div>
 
-      {/* Verification Limit */}
+      {/* Verification Stats */}
       <div className="bg-white rounded-xl border border-slate-200 p-6 mb-8">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm text-slate-500">Verification Badges</p>
-            <p className="text-lg font-semibold text-slate-900">
-              {approvedCount} / {tierLimits.verificationBadges === -1 ? '∞' : tierLimits.verificationBadges}
-            </p>
-          </div>
-          {tierLimits.verificationBadges !== -1 && approvedCount >= tierLimits.verificationBadges && (
-            <Link
-              href="/dashboard/subscription"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-50 text-primary-700 font-medium rounded-lg hover:bg-primary-100"
-            >
-              <Crown className="w-4 h-4" />
-              Upgrade for More
-            </Link>
-          )}
+        <div>
+          <p className="text-sm text-slate-500">Verified Badges</p>
+          <p className="text-lg font-semibold text-slate-900">{approvedCount}</p>
         </div>
       </div>
 
@@ -211,7 +194,7 @@ export default async function DashboardVerificationsPage() {
       )}
 
       {/* Add New Verification */}
-      {canAddMore && availableTypes.length > 0 && (
+      {availableTypes.length > 0 && (
         <div>
           <h2 className="text-lg font-semibold text-slate-900 mb-4">Add Verification</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -237,21 +220,6 @@ export default async function DashboardVerificationsPage() {
               </Link>
             ))}
           </div>
-        </div>
-      )}
-
-      {!canAddMore && (
-        <div className="bg-slate-50 rounded-xl p-6 text-center">
-          <Crown className="w-8 h-8 text-slate-400 mx-auto mb-3" />
-          <p className="text-slate-600 mb-3">
-            You have reached your verification limit for your current plan.
-          </p>
-          <Link
-            href="/dashboard/subscription"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700"
-          >
-            Upgrade to Add More
-          </Link>
         </div>
       )}
 

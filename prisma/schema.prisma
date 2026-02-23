@@ -141,8 +141,7 @@ model TradesProfile {
 
 enum SubscriptionTier {
   FREE
-  PRO
-  PREMIUM
+  PAID
 }
 
 // =============================================================================

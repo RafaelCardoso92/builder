@@ -3,7 +3,6 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { SUBSCRIPTION_TIERS } from '@/lib/stripe';
 import {
   Briefcase,
   MapPin,
@@ -11,9 +10,7 @@ import {
   PoundSterling,
   Users,
   Search,
-  AlertTriangle,
   CheckCircle,
-  Crown,
 } from 'lucide-react';
 
 const timeframeLabels: Record<string, string> = {
@@ -34,7 +31,7 @@ async function getMatchingJobs(userId: string) {
   });
 
   if (!profile) {
-    return { profile: null, jobs: [], applicationCount: 0 };
+    return { profile: null, jobs: [] };
   }
 
   const tradeIds = profile.trades.map((t) => t.tradeId);
@@ -61,19 +58,7 @@ async function getMatchingJobs(userId: string) {
     hasApplied: appliedJobIds.includes(job.id),
   }));
 
-  // Count applications this month
-  const thisMonth = new Date();
-  thisMonth.setDate(1);
-  thisMonth.setHours(0, 0, 0, 0);
-
-  const applicationCount = await prisma.jobApplication.count({
-    where: {
-      profileId: profile.id,
-      createdAt: { gte: thisMonth },
-    },
-  });
-
-  return { profile, jobs: jobsWithStatus, applicationCount };
+  return { profile, jobs: jobsWithStatus };
 }
 
 export default async function DashboardJobsPage() {
@@ -83,18 +68,11 @@ export default async function DashboardJobsPage() {
     redirect('/login?callbackUrl=/dashboard/jobs');
   }
 
-  const { profile, jobs, applicationCount } = await getMatchingJobs(
-    session.user.id
-  );
+  const { profile, jobs } = await getMatchingJobs(session.user.id);
 
   if (!profile) {
     redirect('/register/tradesperson');
   }
-
-  const tierLimits = SUBSCRIPTION_TIERS[profile.subscriptionTier].limits;
-  const monthlyLimit = tierLimits.jobApplicationsPerMonth;
-  const remaining =
-    monthlyLimit === -1 ? -1 : Math.max(0, monthlyLimit - applicationCount);
 
   const newJobs = jobs.filter((j) => !j.hasApplied);
   const appliedJobs = jobs.filter((j) => j.hasApplied);
@@ -106,47 +84,17 @@ export default async function DashboardJobsPage() {
         <p className="text-slate-600">Jobs matching your trade categories</p>
       </div>
 
-      {/* Stats & Limits */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-white rounded-xl border border-slate-200 p-4">
           <p className="text-sm text-slate-500">Matching Jobs</p>
           <p className="text-2xl font-bold text-slate-900">{newJobs.length}</p>
         </div>
         <div className="bg-white rounded-xl border border-slate-200 p-4">
-          <p className="text-sm text-slate-500">Applied This Month</p>
-          <p className="text-2xl font-bold text-slate-900">{applicationCount}</p>
-        </div>
-        <div className="bg-white rounded-xl border border-slate-200 p-4">
-          <p className="text-sm text-slate-500">Applications Remaining</p>
-          <p className="text-2xl font-bold text-primary-600">
-            {remaining === -1 ? 'Unlimited' : remaining}
-          </p>
+          <p className="text-sm text-slate-500">Applied</p>
+          <p className="text-2xl font-bold text-slate-900">{appliedJobs.length}</p>
         </div>
       </div>
-
-      {/* Upgrade Notice */}
-      {remaining !== -1 && remaining <= 2 && (
-        <div className="flex items-start gap-3 p-4 bg-orange-50 border border-orange-200 rounded-xl">
-          <AlertTriangle className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
-          <div>
-            <p className="font-medium text-orange-900">
-              {remaining === 0
-                ? 'You have reached your application limit'
-                : `Only ${remaining} application${remaining === 1 ? '' : 's'} remaining`}
-            </p>
-            <p className="text-sm text-orange-700 mt-1">
-              Upgrade your subscription to apply to more jobs.
-            </p>
-            <Link
-              href="/dashboard/subscription"
-              className="inline-flex items-center gap-1 mt-2 text-sm font-medium text-orange-700 hover:text-orange-900"
-            >
-              <Crown className="w-4 h-4" />
-              Upgrade Now
-            </Link>
-          </div>
-        </div>
-      )}
 
       {/* Jobs List */}
       {jobs.length > 0 ? (

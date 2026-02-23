@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { SUBSCRIPTION_TIERS } from '@/lib/stripe';
 
 const validTypes = [
   'IDENTITY',
@@ -69,20 +68,6 @@ export async function POST(request: NextRequest) {
         { error: 'You already have a verification of this type' },
         { status: 400 }
       );
-    }
-
-    // Check tier limits
-    const tierLimits = SUBSCRIPTION_TIERS[profile.subscriptionTier].limits;
-    const approvedCount = profile.verifications.filter(v => v.status === 'APPROVED').length;
-    const pendingCount = profile.verifications.filter(v => v.status === 'PENDING').length;
-
-    if (tierLimits.verificationBadges !== -1) {
-      if (approvedCount + pendingCount >= tierLimits.verificationBadges) {
-        return NextResponse.json(
-          { error: 'You have reached your verification limit for your current plan' },
-          { status: 400 }
-        );
-      }
     }
 
     // Create verification request

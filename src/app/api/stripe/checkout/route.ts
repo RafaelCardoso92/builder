@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { tier } = body;
 
-    if (!tier || !['PRO', 'PREMIUM'].includes(tier)) {
+    if (tier !== 'PAID') {
       return NextResponse.json(
         { error: 'Invalid subscription tier' },
         { status: 400 }

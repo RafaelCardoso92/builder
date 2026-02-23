@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { SUBSCRIPTION_TIERS } from '@/lib/stripe';
 import VerificationRequestForm from './VerificationRequestForm';
 
 const verificationTypes: Record<string, { name: string; description: string; requirements: string[] }> = {
@@ -116,15 +115,6 @@ export default async function NewVerificationPage({
   // Check if already requested this type
   const existingVerification = profile.verifications.find(v => v.type === type);
   if (existingVerification) {
-    redirect('/dashboard/verifications');
-  }
-
-  // Check tier limits
-  const tierLimits = SUBSCRIPTION_TIERS[profile.subscriptionTier].limits;
-  const approvedCount = profile.verifications.filter(v => v.status === 'APPROVED').length;
-  const canAddMore = tierLimits.verificationBadges === -1 || approvedCount < tierLimits.verificationBadges;
-
-  if (!canAddMore) {
     redirect('/dashboard/verifications');
   }
 

@@ -14,7 +14,7 @@ import {
 
 interface JobApplicationFormProps {
   jobId: string;
-  subscriptionTier: 'FREE' | 'PRO' | 'PREMIUM';
+  subscriptionTier: 'FREE' | 'PAID';
 }
 
 export default function JobApplicationForm({
@@ -173,22 +173,6 @@ export default function JobApplicationForm({
         </div>
       </div>
 
-      {/* Subscription Info */}
-      {subscriptionTier === 'FREE' && (
-        <div className="flex items-start gap-2 p-3 bg-slate-50 rounded-lg text-sm text-slate-600">
-          <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
-          <p>
-            Free accounts can apply to 5 jobs per month.{' '}
-            <Link
-              href="/dashboard/subscription"
-              className="text-primary-600 hover:underline"
-            >
-              Upgrade
-            </Link>{' '}
-            for more applications.
-          </p>
-        </div>
-      )}
 
       {/* Submit */}
       <button

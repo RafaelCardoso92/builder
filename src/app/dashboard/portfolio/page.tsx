@@ -30,7 +30,6 @@ export default async function PortfolioPage() {
     redirect('/dashboard/profile');
   }
 
-  const maxPhotos = profile.subscriptionTier === 'FREE' ? 5 : profile.subscriptionTier === 'PRO' ? 20 : 100;
   const totalPhotos = profile.portfolio.reduce((acc, item) => acc + item.images.length, 0);
 
   return (
@@ -51,28 +50,14 @@ export default async function PortfolioPage() {
         </Link>
       </div>
 
-      {/* Photo Limit */}
+      {/* Photo Count */}
       <div className="bg-white rounded-xl border border-slate-200 p-4 mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm text-slate-600">Photos used</span>
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-slate-600">Total photos</span>
           <span className="text-sm font-medium text-slate-900">
-            {totalPhotos} / {maxPhotos}
+            {totalPhotos}
           </span>
         </div>
-        <div className="w-full bg-slate-200 rounded-full h-2">
-          <div
-            className="bg-primary-600 h-2 rounded-full"
-            style={{ width: `${Math.min((totalPhotos / maxPhotos) * 100, 100)}%` }}
-          />
-        </div>
-        {profile.subscriptionTier === 'FREE' && (
-          <p className="text-xs text-slate-500 mt-2">
-            <Link href="/dashboard/subscription" className="text-primary-600 hover:underline">
-              Upgrade to Pro
-            </Link>{" "}
-            for up to 20 photos
-          </p>
-        )}
       </div>
 
       {/* Portfolio Grid */}

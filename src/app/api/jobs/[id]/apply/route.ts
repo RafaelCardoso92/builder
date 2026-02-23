@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { SUBSCRIPTION_TIERS } from '@/lib/stripe';
 
 // POST /api/jobs/[id]/apply - Submit application
 export async function POST(
@@ -78,33 +77,6 @@ export async function POST(
         { error: 'You have already applied to this job' },
         { status: 400 }
       );
-    }
-
-    // Check subscription limits
-    const tierLimits = SUBSCRIPTION_TIERS[profile.subscriptionTier].limits;
-    const monthlyLimit = tierLimits.jobApplicationsPerMonth;
-
-    if (monthlyLimit !== -1) {
-      const thisMonth = new Date();
-      thisMonth.setDate(1);
-      thisMonth.setHours(0, 0, 0, 0);
-
-      const applicationCount = await prisma.jobApplication.count({
-        where: {
-          profileId: profile.id,
-          createdAt: { gte: thisMonth },
-        },
-      });
-
-      if (applicationCount >= monthlyLimit) {
-        return NextResponse.json(
-          {
-            error: `You have reached your monthly limit of ${monthlyLimit} job applications. Upgrade your subscription for more.`,
-            limitReached: true,
-          },
-          { status: 403 }
-        );
-      }
     }
 
     // Parse request body

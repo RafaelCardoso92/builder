@@ -25,20 +25,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 });
     }
 
-    // Check photo limits
-    const existingPortfolio = await prisma.portfolioItem.findMany({
-      where: { profileId: profile.id },
-    });
-    
-    const totalPhotos = existingPortfolio.reduce((acc, item) => acc + item.images.length, 0);
-    const maxPhotos = profile.subscriptionTier === 'FREE' ? 5 : profile.subscriptionTier === 'PRO' ? 20 : 100;
-
-    if (totalPhotos + (images?.length || 0) > maxPhotos) {
-      return NextResponse.json({ 
-        error: `Photo limit reached. You can have up to ${maxPhotos} photos on your current plan.` 
-      }, { status: 400 });
-    }
-
     const portfolioItem = await prisma.portfolioItem.create({
       data: {
         profileId: profile.id,

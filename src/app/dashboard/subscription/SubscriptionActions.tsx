@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { Settings } from 'lucide-react';
+import { Settings, Loader2, Sparkles } from 'lucide-react';
 
 interface SubscriptionActionsProps {
   hasSubscription: boolean;
-  targetTier?: 'PRO' | 'PREMIUM';
+  targetTier?: 'PAID';
   buttonText?: string;
   highlighted?: boolean;
 }
@@ -78,9 +78,13 @@ export default function SubscriptionActions({
         <button
           onClick={handleBillingPortal}
           disabled={loading}
-          className="inline-flex items-center gap-2 px-4 py-2 border border-slate-300 text-slate-700 font-medium rounded-lg hover:bg-slate-50 disabled:opacity-50"
+          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 border border-slate-300 text-slate-700 font-medium rounded-xl hover:bg-slate-50 active:bg-slate-100 disabled:opacity-50 transition-colors text-sm sm:text-base w-full sm:w-auto"
         >
-          <Settings className="w-4 h-4" />
+          {loading ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <Settings className="w-4 h-4" />
+          )}
           {loading ? 'Loading...' : 'Manage Billing'}
         </button>
       </div>
@@ -90,19 +94,24 @@ export default function SubscriptionActions({
   return (
     <div>
       {error && (
-        <p className="text-red-600 text-sm mb-2 text-center">{error}</p>
+        <p className="text-red-600 text-sm mb-3 text-center">{error}</p>
       )}
       <button
         onClick={handleCheckout}
         disabled={loading}
         className={
-          'w-full py-3 px-4 font-medium rounded-lg transition-colors disabled:opacity-50 ' +
+          'w-full flex items-center justify-center gap-2 py-3.5 px-6 font-semibold rounded-xl transition-all disabled:opacity-50 text-base ' +
           (highlighted
-            ? 'bg-primary-600 text-white hover:bg-primary-700'
-            : 'bg-slate-100 text-slate-700 hover:bg-slate-200')
+            ? 'bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800 shadow-lg shadow-primary-600/25 hover:shadow-xl hover:shadow-primary-600/30'
+            : 'bg-slate-100 text-slate-700 hover:bg-slate-200 active:bg-slate-300')
         }
       >
-        {loading ? 'Loading...' : buttonText}
+        {loading ? (
+          <Loader2 className="w-5 h-5 animate-spin" />
+        ) : (
+          <Sparkles className="w-5 h-5" />
+        )}
+        {loading ? 'Processing...' : buttonText}
       </button>
     </div>
   );

@@ -10,13 +10,7 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
   if (!profileId) return;
 
   const priceId = subscription.items.data[0]?.price.id;
-  let tier: 'FREE' | 'PRO' | 'PREMIUM' = 'FREE';
-
-  if (priceId === process.env.STRIPE_PRO_PRICE_ID) {
-    tier = 'PRO';
-  } else if (priceId === process.env.STRIPE_PREMIUM_PRICE_ID) {
-    tier = 'PREMIUM';
-  }
+  const tier: 'FREE' | 'PAID' = priceId === process.env.STRIPE_PAID_PRICE_ID ? 'PAID' : 'FREE';
 
   await prisma.tradesProfile.update({
     where: { id: profileId },
@@ -32,13 +26,7 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
   if (!profileId) return;
 
   const priceId = subscription.items.data[0]?.price.id;
-  let tier: 'FREE' | 'PRO' | 'PREMIUM' = 'FREE';
-
-  if (priceId === process.env.STRIPE_PRO_PRICE_ID) {
-    tier = 'PRO';
-  } else if (priceId === process.env.STRIPE_PREMIUM_PRICE_ID) {
-    tier = 'PREMIUM';
-  }
+  const tier: 'FREE' | 'PAID' = priceId === process.env.STRIPE_PAID_PRICE_ID ? 'PAID' : 'FREE';
 
   // Handle subscription status
   if (subscription.status === 'active' || subscription.status === 'trialing') {
@@ -88,13 +76,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   // Get subscription details
   const subscription = await stripe.subscriptions.retrieve(subscriptionId);
   const priceId = subscription.items.data[0]?.price.id;
-
-  let tier: 'FREE' | 'PRO' | 'PREMIUM' = 'FREE';
-  if (priceId === process.env.STRIPE_PRO_PRICE_ID) {
-    tier = 'PRO';
-  } else if (priceId === process.env.STRIPE_PREMIUM_PRICE_ID) {
-    tier = 'PREMIUM';
-  }
+  const tier: 'FREE' | 'PAID' = priceId === process.env.STRIPE_PAID_PRICE_ID ? 'PAID' : 'FREE';
 
   await prisma.tradesProfile.update({
     where: { id: profileId },
