@@ -1,3 +1,5 @@
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import {
   AlertTriangle,
@@ -7,7 +9,9 @@ import {
   Calendar,
   Shield,
   FileText,
+  Lock,
 } from 'lucide-react';
+import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
 interface SearchParams {
@@ -26,7 +30,7 @@ interface BadPayerWhereClause {
   locationPostcode?: { startsWith: string };
 }
 
-async function getPublicReports(params: SearchParams) {
+async function getReports(params: SearchParams) {
   const page = Math.max(1, parseInt(params.page || '1'));
   const limit = 20;
 
@@ -81,13 +85,77 @@ async function getPublicReports(params: SearchParams) {
   };
 }
 
-export default async function BadPayersPublicPage({
+export default async function BadPayersPage({
   searchParams,
 }: {
   searchParams: Promise<SearchParams>;
 }) {
+  const session = await getServerSession(authOptions);
+
+  // Check if user is a tradesperson
+  const isTradesperson = session?.user?.role === 'TRADESPERSON' || session?.user?.role === 'ADMIN';
+
+  if (!isTradesperson) {
+    // Show restricted access page for non-tradespeople
+    return (
+      <div className="min-h-screen bg-slate-50">
+        <div className="bg-red-600 text-white">
+          <div className="max-w-6xl mx-auto px-4 py-12">
+            <div className="flex items-center gap-3 mb-4">
+              <AlertTriangle className="w-10 h-10" />
+              <h1 className="text-3xl font-bold">Bad Payer Database</h1>
+            </div>
+            <p className="text-red-100 max-w-2xl">
+              A community database to help tradespeople avoid non-paying customers.
+            </p>
+          </div>
+        </div>
+
+        <div className="max-w-2xl mx-auto px-4 py-16">
+          <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center">
+            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Lock className="w-8 h-8 text-slate-400" />
+            </div>
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">
+              Tradespeople Only
+            </h2>
+            <p className="text-slate-600 mb-8">
+              The Bad Payer Database is an exclusive benefit for registered tradespeople on Builder.
+              Check potential customers before accepting work and protect yourself from non-payers.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              {session ? (
+                <Link
+                  href="/register/tradesperson"
+                  className="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
+                >
+                  Register as Tradesperson
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    href="/login?callbackUrl=/bad-payers"
+                    className="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    href="/register/tradesperson"
+                    className="inline-flex items-center justify-center px-6 py-3 border border-slate-300 text-slate-700 font-medium rounded-lg hover:bg-slate-50 transition-colors"
+                  >
+                    Register as Tradesperson
+                  </Link>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const params = await searchParams;
-  const { reports, pagination } = await getPublicReports(params);
+  const { reports, pagination } = await getReports(params);
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -278,6 +346,12 @@ export default async function BadPayersPublicPage({
                 information to protect privacy.
               </p>
             </div>
+          </div>
+          <div className="mt-8 pt-6 border-t border-slate-200">
+            <p className="text-sm text-slate-500">
+              Reports represent the views of reporters only. Builder does not verify report accuracy.
+              See our <Link href="/bad-payers/guidelines" className="text-primary-600 hover:text-primary-700 underline">Bad Payer Report Guidelines</Link> and <Link href="/terms" className="text-primary-600 hover:text-primary-700 underline">Terms of Service</Link> for full details.
+            </p>
           </div>
         </div>
       </div>

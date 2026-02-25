@@ -16,11 +16,22 @@ interface BadPayerWhereClause {
   locationPostcode?: { startsWith: string };
 }
 
-// GET /api/bad-payers - List published reports (public) or all reports (admin)
+// GET /api/bad-payers - List published reports (tradespeople only) or all reports (admin)
 export async function GET(req: Request) {
   try {
     const session = await getServerSession(authOptions);
     const { searchParams } = new URL(req.url);
+
+    // Restrict access to tradespeople and admins only
+    const isTradesperson = session?.user?.role === 'TRADESPERSON';
+    const isAdmin = session?.user?.role === 'ADMIN';
+
+    if (!isTradesperson && !isAdmin) {
+      return NextResponse.json(
+        { error: 'Access restricted to registered tradespeople' },
+        { status: 403 }
+      );
+    }
 
     const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
     const limit = Math.min(50, Math.max(1, parseInt(searchParams.get('limit') || '20')));
@@ -28,12 +39,10 @@ export async function GET(req: Request) {
     const postcode = searchParams.get('postcode') || '';
     const status = searchParams.get('status') || '';
 
-    const isAdmin = session?.user?.role === 'ADMIN';
-
     // Build where clause
     const where: BadPayerWhereClause = {};
 
-    // Public users can only see published, public reports
+    // Tradespeople can only see published, public reports
     if (!isAdmin) {
       where.status = 'PUBLISHED';
       where.isPublic = true;

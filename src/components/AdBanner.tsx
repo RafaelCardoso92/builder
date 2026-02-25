@@ -3,6 +3,7 @@
 import { X, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
+import GoogleAd from './GoogleAd';
 
 interface AdBannerProps {
   variant?: 'top' | 'sidebar' | 'inline';
@@ -14,6 +15,11 @@ export default function AdBanner({ variant = 'top', className = '' }: AdBannerPr
 
   if (dismissed) return null;
 
+  // Get ad slot IDs from environment variables (optional, with fallbacks for testing)
+  const topAdSlot = process.env.NEXT_PUBLIC_AD_SLOT_TOP || '';
+  const sidebarAdSlot = process.env.NEXT_PUBLIC_AD_SLOT_SIDEBAR || '';
+  const inlineAdSlot = process.env.NEXT_PUBLIC_AD_SLOT_INLINE || '';
+
   if (variant === 'top') {
     return (
       <div className={`bg-gradient-to-r from-slate-100 to-slate-50 border-b border-slate-200 ${className}`}>
@@ -22,9 +28,12 @@ export default function AdBanner({ variant = 'top', className = '' }: AdBannerPr
           <div className="flex sm:hidden items-center justify-between gap-2">
             <div className="flex items-center gap-2 flex-1 min-w-0">
               <span className="text-[10px] text-slate-400 uppercase tracking-wide shrink-0">Ad</span>
-              <div className="h-10 bg-slate-200/80 rounded flex items-center justify-center flex-1 min-w-0">
-                <span className="text-slate-500 text-xs truncate px-2">Advertisement</span>
-              </div>
+              <GoogleAd
+                adSlot={topAdSlot}
+                adFormat="horizontal"
+                className="flex-1 min-w-0 rounded"
+                style={{ minHeight: '40px' }}
+              />
             </div>
             <div className="flex items-center gap-1 shrink-0">
               <Link
@@ -48,9 +57,12 @@ export default function AdBanner({ variant = 'top', className = '' }: AdBannerPr
           <div className="hidden sm:flex items-center justify-between gap-4">
             <div className="flex-1 flex items-center justify-center gap-3">
               <span className="text-xs text-slate-400 uppercase tracking-wide">Ad</span>
-              <div className="h-[50px] bg-slate-200/80 rounded-lg flex items-center justify-center px-8 flex-1 max-w-2xl">
-                <span className="text-slate-500 text-sm">Advertisement Space</span>
-              </div>
+              <GoogleAd
+                adSlot={topAdSlot}
+                adFormat="horizontal"
+                className="flex-1 max-w-2xl rounded-lg"
+                style={{ minHeight: '50px' }}
+              />
             </div>
             <div className="flex items-center gap-2 shrink-0">
               <Link
@@ -87,9 +99,13 @@ export default function AdBanner({ variant = 'top', className = '' }: AdBannerPr
             <X className="w-4 h-4" />
           </button>
         </div>
-        <div className="h-[180px] bg-slate-200/80 rounded-lg flex items-center justify-center">
-          <span className="text-slate-500 text-sm">Ad Space</span>
-        </div>
+        <GoogleAd
+          adSlot={sidebarAdSlot}
+          adFormat="rectangle"
+          fullWidthResponsive={false}
+          className="rounded-lg"
+          style={{ minHeight: '180px' }}
+        />
         <Link
           href="/dashboard/subscription"
           className="flex items-center justify-center gap-1.5 w-full mt-3 py-2 text-sm font-medium text-primary-600 hover:text-primary-700 hover:bg-primary-50 rounded-lg transition-colors"
@@ -116,9 +132,12 @@ export default function AdBanner({ variant = 'top', className = '' }: AdBannerPr
             <X className="w-4 h-4" />
           </button>
         </div>
-        <div className="h-16 bg-slate-200/80 rounded-lg flex items-center justify-center">
-          <span className="text-slate-500 text-sm">Ad Space</span>
-        </div>
+        <GoogleAd
+          adSlot={inlineAdSlot}
+          adFormat="fluid"
+          className="rounded-lg"
+          style={{ minHeight: '64px' }}
+        />
         <Link
           href="/dashboard/subscription"
           className="flex items-center justify-center gap-1.5 py-2 text-sm font-medium text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
@@ -132,9 +151,12 @@ export default function AdBanner({ variant = 'top', className = '' }: AdBannerPr
       <div className="hidden sm:flex items-center justify-between gap-4">
         <div className="flex items-center gap-3 flex-1">
           <span className="text-xs text-slate-400 uppercase tracking-wide shrink-0">Ad</span>
-          <div className="h-[60px] bg-slate-200/80 rounded-lg flex items-center justify-center px-6 flex-1">
-            <span className="text-slate-500 text-sm">Advertisement</span>
-          </div>
+          <GoogleAd
+            adSlot={inlineAdSlot}
+            adFormat="horizontal"
+            className="flex-1 rounded-lg"
+            style={{ minHeight: '60px' }}
+          />
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <Link

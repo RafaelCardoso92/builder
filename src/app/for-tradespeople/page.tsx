@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { Users, Star, TrendingUp, Shield, MessageSquare, BarChart3, CheckCircle, ArrowRight, Crown } from 'lucide-react';
+import { Users, Star, TrendingUp, Shield, MessageSquare, BarChart3, CheckCircle, ArrowRight, Crown, AlertTriangle } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: "For Tradespeople - Grow Your Business",
@@ -16,6 +16,11 @@ const benefits = [
     icon: Users,
     title: 'Reach More Customers',
     description: 'Get discovered by thousands of homeowners actively looking for tradespeople in your area.',
+  },
+  {
+    icon: AlertTriangle,
+    title: 'Bad Payer Protection',
+    description: 'Check potential customers before accepting work. Report non-payers to protect fellow tradespeople.',
   },
   {
     icon: Star,
@@ -125,6 +130,13 @@ export default function ForTradespeopleePage() {
       <section className="bg-gradient-to-br from-secondary-600 to-secondary-800 text-white py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
+            <Link
+              href="/switch"
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 rounded-full px-4 py-2 mb-6 text-sm transition-colors"
+            >
+              <span>Switching from Checkatrade?</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               Grow Your Trade Business with Builder
             </h1>

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import { Menu, X, Search, User, ChevronDown, LayoutDashboard, Briefcase } from 'lucide-react';
 
 const trades = [
@@ -168,12 +168,12 @@ export default function Header() {
                     )}
 
                     <hr className="my-2 border-slate-200" />
-                    <Link
-                      href="/api/auth/signout"
-                      className="block px-4 py-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+                    <button
+                      onClick={() => signOut({ callbackUrl: '/' })}
+                      className="block w-full text-left px-4 py-2 text-red-600 hover:text-red-700 hover:bg-red-50"
                     >
                       Sign Out
-                    </Link>
+                    </button>
                   </div>
                 )}
               </div>
@@ -259,12 +259,12 @@ export default function Header() {
                       My Account
                     </Link>
                   )}
-                  <Link
-                    href="/api/auth/signout"
-                    className="px-4 py-3 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg font-medium"
+                  <button
+                    onClick={() => signOut({ callbackUrl: '/' })}
+                    className="px-4 py-3 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg font-medium w-full text-left"
                   >
                     Sign Out
-                  </Link>
+                  </button>
                 </>
               ) : (
                 <>

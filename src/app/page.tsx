@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { Search, Shield, Star, MessageSquare, CheckCircle, ArrowRight, Building2, Droplet, Zap, Hammer, PaintBucket, Trees } from 'lucide-react';
+import { Search, Shield, Star, MessageSquare, CheckCircle, ArrowRight, Building2, Droplet, Zap, Hammer, PaintBucket, Trees, Briefcase, Users, Clock } from 'lucide-react';
 import DashboardReturnBanner from '@/components/DashboardReturnBanner';
 
 // Force dynamic rendering - no SSG
@@ -132,6 +132,18 @@ export default function HomePage() {
               </form>
             </div>
 
+            {/* Or Post a Job */}
+            <div className="mt-6">
+              <span className="text-primary-200 text-sm">or</span>
+              <Link
+                href="/jobs/post"
+                className="ml-3 inline-flex items-center gap-2 px-6 py-2 bg-white/10 hover:bg-white/20 text-white font-medium rounded-lg transition-colors"
+              >
+                <Briefcase className="w-5 h-5" />
+                Post a Job &amp; Get Quotes
+              </Link>
+            </div>
+
             {/* Trust Signals */}
             <div className="flex flex-wrap items-center justify-center gap-6 mt-10 text-sm text-primary-200">
               <span className="flex items-center gap-2">
@@ -161,6 +173,46 @@ export default function HomePage() {
                 <p className="text-slate-600 mt-1">{stat.label}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Post a Job CTA */}
+      <section className="py-12 bg-gradient-to-r from-orange-500 to-orange-600">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="text-white text-center md:text-left">
+              <h2 className="text-2xl md:text-3xl font-bold mb-2">
+                Need work done?
+              </h2>
+              <p className="text-orange-100">
+                Post your job for free and receive quotes from local tradespeople
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <div className="flex items-center gap-6 text-white/90 text-sm">
+                <span className="flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5" />
+                  Free to post
+                </span>
+                <span className="flex items-center gap-2">
+                  <Users className="w-5 h-5" />
+                  Multiple quotes
+                </span>
+                <span className="flex items-center gap-2">
+                  <Clock className="w-5 h-5" />
+                  Quick responses
+                </span>
+              </div>
+              <Link
+                href="/jobs/post"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-white text-orange-600 font-semibold rounded-xl hover:bg-orange-50 transition-colors shadow-lg"
+              >
+                <Briefcase className="w-5 h-5" />
+                Post a Job
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>

@@ -83,6 +83,21 @@ export default function TermsPage() {
               Tradespeople are independent contractors and not employees, workers, agents, or partners of Builder. The relationship between a Tradesperson and Customer is a direct contractual relationship to which Builder is not a party.
             </p>
 
+            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">4.3 No Payment Processing or Escrow</h3>
+            <p className="text-slate-600 mb-4">
+              <strong>Builder does not process, hold, or guarantee any payments between Customers and Tradespeople.</strong> We are not a payment intermediary, escrow service, or financial services provider. Specifically:
+            </p>
+            <ul className="list-disc pl-6 text-slate-600 mb-4 space-y-2">
+              <li>All payments are made directly between Customers and Tradespeople</li>
+              <li>We do not hold funds on behalf of either party</li>
+              <li>We do not guarantee that payment will be made or received</li>
+              <li>We cannot recover funds or intervene in payment disputes</li>
+              <li>We are not responsible for non-payment by either party</li>
+            </ul>
+            <p className="text-slate-600 mb-4">
+              Users are solely responsible for agreeing payment terms, collecting payments, and resolving any payment disputes. We strongly recommend reviewing our <Link href="/safety" className="text-primary-600 hover:text-primary-700">Safety Guidelines</Link> for payment best practices.
+            </p>
+
             <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">5. Tradesperson Obligations</h2>
             <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">5.1 Verification and Standards</h3>
             <p className="text-slate-600 mb-4">
@@ -205,7 +220,42 @@ export default function TermsPage() {
               We may monitor messages to ensure compliance with these Terms and to protect Users from fraud and abuse.
             </p>
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">10. Prohibited Conduct</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">10. Bad Payer Reports</h2>
+            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">10.1 Purpose and Nature</h3>
+            <p className="text-slate-600 mb-4">
+              The Bad Payer Report system allows registered Tradespeople to report non-payment experiences. <strong>Builder acts solely as a neutral platform</strong> for these reports and does not verify their accuracy.
+            </p>
+
+            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">10.2 Reporter Responsibilities</h3>
+            <p className="text-slate-600 mb-4">
+              By submitting a Bad Payer Report, you:
+            </p>
+            <ul className="list-disc pl-6 text-slate-600 mb-4 space-y-2">
+              <li>Warrant that all information is true, accurate, and complete</li>
+              <li>Accept sole responsibility for the content of your report</li>
+              <li>Agree to indemnify Builder against any claims arising from your report</li>
+              <li>Acknowledge that false reports may constitute defamation</li>
+              <li>Agree to comply with the <Link href="/bad-payers/guidelines" className="text-primary-600 hover:text-primary-700">Bad Payer Report Guidelines</Link></li>
+            </ul>
+
+            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">10.3 Platform Disclaimer</h3>
+            <p className="text-slate-600 mb-4">
+              Builder UK Ltd:
+            </p>
+            <ul className="list-disc pl-6 text-slate-600 mb-4 space-y-2">
+              <li>Does NOT verify the accuracy of Bad Payer Reports</li>
+              <li>Does NOT investigate or arbitrate underlying disputes</li>
+              <li>Does NOT endorse any report or take sides in disputes</li>
+              <li>Accepts NO liability for any loss arising from reliance on reports</li>
+              <li>Reserves the right to remove any report at any time</li>
+            </ul>
+
+            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">10.4 Disputes and Removal</h3>
+            <p className="text-slate-600 mb-4">
+              Any person may dispute a report by contacting us. We will review disputed reports but are not obligated to resolve disputes or determine their merits. Reports may be removed for policy violations, upon reporter request, upon payment resolution, or as required by law.
+            </p>
+
+            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">11. Prohibited Conduct</h2>
             <p className="text-slate-600 mb-4">
               You agree not to:
             </p>
@@ -224,19 +274,19 @@ export default function TermsPage() {
               <li>Engage in any fraudulent activity</li>
             </ul>
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">11. Intellectual Property</h2>
-            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">11.1 Our Intellectual Property</h3>
+            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">12. Intellectual Property</h2>
+            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">12.1 Our Intellectual Property</h3>
             <p className="text-slate-600 mb-4">
               The Platform, including its design, features, content, and branding, is owned by Builder UK Ltd and protected by intellectual property laws. You may not copy, modify, distribute, or create derivative works without our written permission.
             </p>
 
-            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">11.2 User Content</h3>
+            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">12.2 User Content</h3>
             <p className="text-slate-600 mb-4">
               You retain ownership of Content you upload to the Platform. By uploading Content, you grant us a non-exclusive, worldwide, royalty-free license to use, display, reproduce, and distribute that Content in connection with operating and promoting the Platform.
             </p>
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">12. Limitation of Liability</h2>
-            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">12.1 Platform Services</h3>
+            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">13. Limitation of Liability</h2>
+            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">13.1 Platform Services</h3>
             <p className="text-slate-600 mb-4">
               The Platform is provided &quot;as is&quot; and &quot;as available&quot;. To the fullest extent permitted by law:
             </p>
@@ -247,7 +297,7 @@ export default function TermsPage() {
               <li>We are not liable for any disputes between Customers and Tradespeople</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">12.2 Work Performed by Tradespeople</h3>
+            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">13.2 Work Performed by Tradespeople</h3>
             <p className="text-slate-600 mb-4">
               <strong>Builder is not responsible for work performed by Tradespeople.</strong> Any contract for work is between the Customer and Tradesperson directly. Customers should:
             </p>
@@ -258,12 +308,12 @@ export default function TermsPage() {
               <li>Check references where appropriate</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">12.3 Maximum Liability</h3>
+            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">13.3 Maximum Liability</h3>
             <p className="text-slate-600 mb-4">
               To the maximum extent permitted by law, our total liability to you for any claims arising from your use of the Platform shall not exceed the greater of: (a) £100, or (b) the fees you have paid to us in the 12 months preceding the claim.
             </p>
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">13. Indemnification</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">14. Indemnification</h2>
             <p className="text-slate-600 mb-4">
               You agree to indemnify and hold harmless Builder UK Ltd, its officers, directors, employees, and agents from any claims, damages, losses, or expenses (including legal fees) arising from:
             </p>
@@ -275,13 +325,13 @@ export default function TermsPage() {
               <li>Any work performed by you (for Tradespeople)</li>
             </ul>
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">14. Suspension and Termination</h2>
-            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">14.1 By You</h3>
+            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">15. Suspension and Termination</h2>
+            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">15.1 By You</h3>
             <p className="text-slate-600 mb-4">
               You may close your account at any time by contacting us. If you have an active subscription, it will be canceled at the end of the current billing period.
             </p>
 
-            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">14.2 By Us</h3>
+            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">15.2 By Us</h3>
             <p className="text-slate-600 mb-4">
               We may suspend or terminate your account immediately if:
             </p>
@@ -293,44 +343,44 @@ export default function TermsPage() {
               <li>We receive multiple legitimate complaints about your conduct</li>
             </ul>
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">15. Dispute Resolution</h2>
-            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">15.1 Disputes Between Users</h3>
+            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">16. Dispute Resolution</h2>
+            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">16.1 Disputes Between Users</h3>
             <p className="text-slate-600 mb-4">
               We encourage Customers and Tradespeople to resolve disputes directly. While we may provide guidance or mediation, we are not obligated to resolve disputes between Users and accept no liability for their outcome.
             </p>
 
-            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">15.2 Disputes With Builder</h3>
+            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">16.2 Disputes With Builder</h3>
             <p className="text-slate-600 mb-4">
               If you have a dispute with us, please contact us first to attempt to resolve it. Any legal proceedings must be brought in the courts of England and Wales.
             </p>
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">16. Changes to Terms</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">17. Changes to Terms</h2>
             <p className="text-slate-600 mb-4">
               We may modify these Terms at any time. We will notify you of material changes by email or through the Platform. Continued use of the Platform after changes take effect constitutes acceptance of the modified Terms.
             </p>
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">17. General Provisions</h2>
-            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">17.1 Entire Agreement</h3>
+            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">18. General Provisions</h2>
+            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">18.1 Entire Agreement</h3>
             <p className="text-slate-600 mb-4">
               These Terms, together with our Privacy Policy and Cookie Policy, constitute the entire agreement between you and Builder UK Ltd.
             </p>
 
-            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">17.2 Severability</h3>
+            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">18.2 Severability</h3>
             <p className="text-slate-600 mb-4">
               If any provision of these Terms is found to be unenforceable, the remaining provisions will continue in effect.
             </p>
 
-            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">17.3 No Waiver</h3>
+            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">18.3 No Waiver</h3>
             <p className="text-slate-600 mb-4">
               Our failure to enforce any right or provision of these Terms shall not constitute a waiver of that right or provision.
             </p>
 
-            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">17.4 Governing Law</h3>
+            <h3 className="text-xl font-semibold text-slate-800 mt-6 mb-3">18.4 Governing Law</h3>
             <p className="text-slate-600 mb-4">
               These Terms are governed by the laws of England and Wales. You agree to submit to the exclusive jurisdiction of the courts of England and Wales.
             </p>
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">18. Contact Us</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">19. Contact Us</h2>
             <p className="text-slate-600 mb-4">
               If you have any questions about these Terms, please contact us at:
             </p>

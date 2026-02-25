@@ -12,6 +12,7 @@ import {
   Home,
 } from 'lucide-react';
 import AdminMobileNav from './AdminMobileNav';
+import SignOutButton from '@/components/SignOutButton';
 
 const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
@@ -105,13 +106,9 @@ export default async function AdminLayout({
               <Home className="w-4 h-4" />
               Back to Site
             </Link>
-            <Link
-              href="/api/auth/signout"
+            <SignOutButton
               className="flex items-center gap-2 px-3 py-2 text-sm text-slate-400 rounded-lg hover:bg-slate-800 hover:text-white w-full mt-1"
-            >
-              <LogOut className="w-4 h-4" />
-              Sign out
-            </Link>
+            />
           </div>
         </aside>
 

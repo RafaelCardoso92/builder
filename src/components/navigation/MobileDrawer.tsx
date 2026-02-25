@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import { X, Menu, LogOut } from 'lucide-react';
 
 interface NavItem {
@@ -179,8 +180,8 @@ export default function MobileDrawer({
                   </div>
                 </div>
               )}
-              <Link
-                href="/api/auth/signout"
+              <button
+                onClick={() => signOut({ callbackUrl: '/' })}
                 className={`flex items-center gap-2 px-3 py-2 text-sm rounded-lg w-full ${
                   isDark
                     ? 'text-slate-300 hover:bg-slate-800'
@@ -189,7 +190,7 @@ export default function MobileDrawer({
               >
                 <LogOut className="w-4 h-4" />
                 Sign out
-              </Link>
+              </button>
             </div>
           </div>
         </div>

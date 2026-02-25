@@ -58,8 +58,18 @@ function LoginForm() {
     }
   };
 
+  // Show contextual message based on where user came from
+  const isFromJobPost = callbackUrl?.includes('/jobs/post');
+
   return (
     <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8">
+      {isFromJobPost && (
+        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-blue-700">
+          <p className="text-sm font-medium">Sign in to post your job</p>
+          <p className="text-sm mt-1">Create a free account or sign in to post your job and receive quotes from local tradespeople.</p>
+        </div>
+      )}
+
       {errorMessage && (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3 text-red-700">
           <AlertCircle className="w-5 h-5 flex-shrink-0" />
@@ -130,7 +140,7 @@ function LoginForm() {
       <div className="mt-6 text-center">
         <p className="text-sm text-slate-600">
           Don&apos;t have an account?{" "}
-          <Link href="/register" className="text-primary-600 hover:text-primary-700 font-medium">
+          <Link href={callbackUrl ? `/register?callbackUrl=${encodeURIComponent(callbackUrl)}` : "/register"} className="text-primary-600 hover:text-primary-700 font-medium">
             Create one
           </Link>
         </p>
